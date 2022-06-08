@@ -22,7 +22,6 @@ import {
 } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
-import MyText from './mytext'
 
 /**
  * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
