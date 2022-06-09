@@ -11,7 +11,6 @@
  */
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react'
-import Draggable from 'react-draggable'; // The default
 import { StyleSheet, View, ScrollView } from 'react-native';
 import {
   Input,
@@ -40,23 +39,9 @@ export default () => (
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.light}>
       <HomeScreen></HomeScreen>
-      {/* <Flex></Flex> */}
     </ApplicationProvider>
   </>
 );
-const Flex = () => {
-  return (
-    <View style={[styles.container, {
-      // Try setting `flexDirection` to `"row"`.
-      flexDirection: "column"
-    }]}>
-      <View style={{ flex: 1, backgroundColor: "red" }} />
-      <View style={{ flex: 2, backgroundColor: "darkorange" }} />
-      <View style={{ flex: 3, backgroundColor: "green" }} />
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

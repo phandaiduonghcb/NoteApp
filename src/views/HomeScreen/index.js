@@ -1,15 +1,9 @@
-import React, { Component } from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
+import React from 'react';
+import {StyleSheet, ScrollView} from 'react-native';
 import {
-    Input,
-    ApplicationProvider,
-    Icon,
-    IconRegistry,
+
     Layout,
-    Text,
-    Card
   } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import SearchBar from '../../components/searchBar';
 import NoteCard from '../../components/noteCard';
 
