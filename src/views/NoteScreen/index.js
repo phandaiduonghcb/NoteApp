@@ -35,7 +35,9 @@ const useBottomNavigationState = (initialState = 0) => {
 
 const NoteScreen = () => {
   // const topState = useTabBarState();
-  const multilineInputState = useInputState();
+  const TitleState = useInputState();
+  const NoteState = useInputState();
+
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon}/>
 
@@ -57,22 +59,24 @@ const NoteScreen = () => {
 
       <Divider/>
       <Input
+        
         multiline={true}
-        textStyle={{ minHeight: 20 }}
+        textStyle={{ minHeight: 50 }}
         placeholder='Title'
-        {...multilineInputState}
+        {...TitleState}
       />
+      <Divider/>
       <Input
+       style={{flex:1}}
         multiline={true}
-        textStyle={{ minHeight: 64 }}
+        textStyle={{minHeight: 999 }}
         placeholder='Multiline'
-        {...multilineInputState}
+        {...NoteState}
       />
-
-      <BottomNavigation style={{}} {...topState}>
-        <BottomNavigationTab icon={AddIcon}/>
-        <BottomNavigationTab />
-        <BottomNavigationTab icon={EmailIcon}/>
+    
+      <BottomNavigation style={{minHeight:50}} {...topState}>
+        <BottomNavigationTab style={{width:'50%'}} icon={AddIcon} />
+        <BottomNavigationTab style={{width:'50%'}} icon={EmailIcon}/>
       </BottomNavigation>
       </React.Fragment>
     
