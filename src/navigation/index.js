@@ -5,40 +5,34 @@ import HomeScreen from '../views/HomeScreen'
 import TagScreen from '../views/TagScreen'
 import SearchBar from '../components/searchBar'
 
+import {Drawer, DrawerItem, IndexPath} from '@ui-kitten/components'
+
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
+  // DrawerItemList,
+  // DrawerItem,
 } from '@react-navigation/drawer';
+const DrawerContent= ({ navigation, state}) => (
+  <Drawer
+    selectedIndex={new IndexPath(state.index)}
+    onSelect={index => navigation.navigate(state.routeNames[index.row])}>
+    <DrawerItem title='Home' />
+    <DrawerItem title='Tag' />
+  </Drawer>
+)
 
-function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      {/* <DrawerItem
-        label="Home"
-        onPress={() => props.navigation.navigate('Tag')}
-      />
-      <DrawerItem
-        label="Tag"
-        onPress={() => props.navigation.toggleDrawer('Home')}
-      /> */}
-    </DrawerContentScrollView>
-  );
-}
-
-const Drawer = createDrawerNavigator();
+const { Navigator, Screen } = createDrawerNavigator();
 
 function MyDrawer() {
   return (
-    <Drawer.Navigator
+    <Navigator
       useLegacyImplementation
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerContent={(props) => <DrawerContent {...props} />}
     >
-      <Drawer.Screen name="Home" component={HomeScreen} options={{headerShown:false}} />
-      <Drawer.Screen name="Tag" component={TagScreen} options={{headerShown:false}} />
-    </Drawer.Navigator>
+      <Screen name="Home" component={HomeScreen} options={{headerShown:false}} />
+      <Screen name="Tag" component={TagScreen} options={{headerShown:false}} />
+    </Navigator>
   );
 }
 
