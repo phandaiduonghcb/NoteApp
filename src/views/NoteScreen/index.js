@@ -1,6 +1,6 @@
 import React from 'react';
 import {Alert,Pressable,StyleSheet } from 'react-native';
-import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab } from '@ui-kitten/components';
+import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab, Layout } from '@ui-kitten/components';
 
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back'/>
@@ -53,6 +53,7 @@ const NoteScreen = () => {
 
   
     return (
+      <Layout>
       <React.Fragment>
         <TopNavigation accessoryLeft={BackAction} accessoryRight={renderRightTopNavigationAction}/>
         
@@ -80,7 +81,7 @@ const NoteScreen = () => {
       </BottomNavigation>
       </React.Fragment>
     
-  
+  </Layout>
 
     )
 }
