@@ -1,6 +1,8 @@
 import React from 'react';
-import {Alert,Pressable,StyleSheet } from 'react-native';
-import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab, Layout } from '@ui-kitten/components';
+import {Alert,Pressable,StyleSheet ,Dimensions} from 'react-native';
+import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab,Layout } from '@ui-kitten/components';
+import { ScrollView } from 'react-native-gesture-handler';
+
 
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back'/>
@@ -32,56 +34,67 @@ const useBottomNavigationState = (initialState = 0) => {
   const [selectedIndex, setSelectedIndex] = React.useState(initialState);
   return { selectedIndex, onSelect: setSelectedIndex };
 };
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const NoteScreen = () => {
   // const topState = useTabBarState();
+  const find_dimesions = (layout)=>{
+    const {x, y, width, height} = layout;
+    console.warn(x);
+    console.warn(y);
+    console.warn(width);
+    console.warn(height);
+    return height;
+  };
   const TitleState = useInputState();
   const NoteState = useInputState();
-
+  const topState = useBottomNavigationState();
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon}/>
 
   );
-  const topState = useBottomNavigationState();
+  
   const renderRightTopNavigationAction = () =>
   (
-    
     <TopNavigationAction icon={BellIcon}/>
-      
-    
   );
 
   
     return (
-      <Layout>
-      <React.Fragment>
-        <TopNavigation accessoryLeft={BackAction} accessoryRight={renderRightTopNavigationAction}/>
-        
+     <Layout style={{flex: 1, flexDirection: 'column',}}>
 
-      <Divider/>
-      <Input
-        
-        multiline={true}
-        textStyle={{ minHeight: 50 }}
-        placeholder='Title'
-        {...TitleState}
-      />
-      <Divider/>
-      <Input
-       style={{flex:1}}
-        multiline={true}
-        textStyle={{minHeight: 999 }}
-        placeholder='Multiline'
-        {...NoteState}
-      />
+     
+      {/* <React.Fragment> */}
+
+        <TopNavigation style={{height:10,flexBasis:10}} accessoryLeft={BackAction} accessoryRight={renderRightTopNavigationAction}/>
+      
+      {/* <Divider/> */}
+      <ScrollView style={{height:windowHeight}}>
+        <Input
+          style={{padding: 10,fontSize:50,flex:1}}
+          multiline={true}
+          // textStyle={{ minHeight: 50 }}
+          placeholder='Title'
+          {...TitleState}
+        />
+       
+          <Input
+        style={{ padding: 10,}}
+      
+          multiline={true}
+          placeholder='Note'
+          {...NoteState}
+        />
+        </ScrollView>
+
+     <Divider/>
+        <BottomNavigation style={{ height:10}} {...topState}>
+          <BottomNavigationTab  icon={AddIcon} />
+          <BottomNavigationTab  icon={EmailIcon}/>
+        </BottomNavigation>
+      {/* </React.Fragment> */}
     
-      <BottomNavigation style={{minHeight:50}} {...topState}>
-        <BottomNavigationTab style={{width:'50%'}} icon={AddIcon} />
-        <BottomNavigationTab style={{width:'50%'}} icon={EmailIcon}/>
-      </BottomNavigation>
-      </React.Fragment>
-    
-  </Layout>
+      </Layout>
 
     )
 }
