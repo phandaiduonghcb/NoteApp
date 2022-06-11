@@ -8,9 +8,6 @@ import SearchBar from '../../components/searchBar';
 import NoteCard from '../../components/noteCard';
 
 
-
-
-
 const HomeScreen = () => {
     return (
         <ScrollView style={styles.container}>
