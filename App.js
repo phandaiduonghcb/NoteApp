@@ -9,36 +9,24 @@
  *
  * @format
  */
-import { NavigationContainer } from '@react-navigation/native';
+
 import React from 'react'
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet} from 'react-native';
 import {
-  Input,
   ApplicationProvider,
-  Button,
-  Icon,
-  IconRegistry,
-  Layout,
-  Text,
-  Card
+  IconRegistry
+
 } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
-import HomeScreen from './src/views/HomeScreen';
-
-/**
- * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
- * https://akveo.github.io/eva-icons
- */
-const HeartIcon = (props) => (
-  <Icon {...props} name='search' />
-);
+import { AppNavigator} from './src/navigation';
+import SearchBar from './src/components/searchBar'
 
 export default () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <HomeScreen></HomeScreen>
+    <ApplicationProvider {...eva} theme={eva.dark}>
+      <AppNavigator/>
     </ApplicationProvider>
   </>
 );
