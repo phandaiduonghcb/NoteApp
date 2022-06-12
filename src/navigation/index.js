@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import {Layout} from '@ui-kitten/components'
 import HomeScreen from '../views/HomeScreen'
 import TagScreen from '../views/TagScreen'
+import NoteScreen from '../views/NoteScreen';
 import SearchBar from '../components/searchBar'
 
 import {Drawer, DrawerItem, IndexPath} from '@ui-kitten/components'
@@ -19,6 +20,7 @@ const DrawerContent= ({ navigation, state}) => (
     onSelect={index => navigation.navigate(state.routeNames[index.row])}>
     <DrawerItem title='Home' />
     <DrawerItem title='Tag' />
+    <DrawerItem title='Note'/>
   </Drawer>
 )
 
@@ -32,6 +34,7 @@ function MyDrawer() {
     >
       <Screen name="Home" component={HomeScreen} options={{headerShown:false}} />
       <Screen name="Tag" component={TagScreen} options={{headerShown:false}} />
+      <Screen name="Note" component={NoteScreen} options={{headerShown:false}} />
     </Navigator>
   );
 }
