@@ -106,8 +106,8 @@ function MyDrawer() {
       useLegacyImplementation
       drawerContent={(props) => <DrawerContent {...props} />}
     >
-      {/* <Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Screen name="Tag" component={TagScreen} options={{ headerShown: false }} /> */}
+      <Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Screen name="Tag" component={TagScreen} options={{ headerShown: false }} />
       <Screen name="Note" component={NoteScreen} options={{ headerShown: false }} />
     </Navigator>
   );
