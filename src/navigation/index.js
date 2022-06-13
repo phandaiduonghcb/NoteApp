@@ -4,14 +4,12 @@ import { Text, Divider, Layout } from '@ui-kitten/components'
 import HomeScreen from '../views/HomeScreen'
 import TagScreen from '../views/TagScreen'
 import NoteScreen from '../views/NoteScreen';
+import ArchiveScreen from '../views/ArchiveScreen'
 
 import { Drawer, DrawerItem, IndexPath, Icon, DrawerGroup } from '@ui-kitten/components'
 
 import {
   createDrawerNavigator,
-  DrawerContentScrollView,
-  // DrawerItemList,
-  // DrawerItem,
 } from '@react-navigation/drawer';
 
 
@@ -33,6 +31,9 @@ const BellIcon = (props) => (
   <Icon {...props} name='bell' />
 );
 
+const ArhiveIcon = (props) => (
+  <Icon {...props} name='archive'/>
+)
 
 
 const Header = (props) => (
@@ -72,7 +73,7 @@ const DrawerContent = ({ navigation, state }) => {
       navigation.navigate('Tag')
     }
     else if (index.row==3){
-      navigation.navigate('Tag')
+      navigation.navigate('Archive')
     }
     else if (index.row==4){
       navigation.navigate('Note')
@@ -91,6 +92,7 @@ const DrawerContent = ({ navigation, state }) => {
         <DrawerItem accessoryLeft={TagIcon} title='Add Tag' />
         <DrawerItem accessoryLeft={LabelIcon} title='Tag' />
       </DrawerGroup>
+      <DrawerItem accessoryLeft={ArhiveIcon} title='Archive'/>
 
       <DrawerItem title='Tag' />
       <DrawerItem title='Note' />
@@ -109,6 +111,7 @@ function MyDrawer() {
       <Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Screen name="Tag" component={TagScreen} options={{ headerShown: false }} />
       <Screen name="Note" component={NoteScreen} options={{ headerShown: false }} />
+      <Screen name="Archive" component={ArchiveScreen} options={{ headerShown: false }} />
     </Navigator>
   );
 }

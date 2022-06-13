@@ -6,9 +6,8 @@ import {
 import NoteCard from '../../components/noteCard';
 import SearchBar from '../../components/searchBar'
 import NoteSortableList from '../../components/noteSortableList';
-import BottomBar from '../../components/bottomBar'
 
-const HomeScreen = ({ navigation }) => {
+const Archive = ({ navigation }) => {
   return (
     // <Layout>
     //   {/* <View style={styles.container}> */}
@@ -31,7 +30,6 @@ const HomeScreen = ({ navigation }) => {
       <SearchBar navigation={navigation} />
     </Layout>
       <NoteSortableList />
-      <BottomBar></BottomBar>
     </>
   )
 }
@@ -48,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen
+export default Archive

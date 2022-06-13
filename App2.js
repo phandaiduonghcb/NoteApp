@@ -9,9 +9,9 @@
  *
  * @format
  */
- import { YellowBox } from "react-native";
- YellowBox.ignoreWarnings([""]);
+
  import React from 'react'
+ import { StyleSheet} from 'react-native';
  import {
    ApplicationProvider,
    IconRegistry
@@ -20,6 +20,7 @@
  import { EvaIconsPack } from '@ui-kitten/eva-icons';
  import * as eva from '@eva-design/eva';
  import { AppNavigator} from './src/navigation';
+ import {BottomBar} from "react-native-bottom-bar";
  
  export default () => (
    <>
