@@ -3,9 +3,13 @@ import {Alert,Pressable,StyleSheet ,Dimensions} from 'react-native';
 import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab,Layout } from '@ui-kitten/components';
 import { ScrollView } from 'react-native-gesture-handler';
 
-
+// var AntDesignICon = require('react-native-vector-icons/AntDesign')
+export const PinIcon = (props) => (
+  <Icon {...props}  name='home' pack='material' />
+  
+);
 const BackIcon = (props) => (
-  <Icon {...props} name='arrow-back'/>
+  <Icon {...props} name='arrow-back' />
 );
 
 const BellIcon = (props) => (
@@ -36,7 +40,9 @@ const useBottomNavigationState = (initialState = 0) => {
 };
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const NoteScreen = () => {
+
+
+const NoteScreen = ({ navigation, route }) => {
   // const topState = useTabBarState();
   const find_dimesions = (layout)=>{
     const {x, y, width, height} = layout;
@@ -46,17 +52,18 @@ const NoteScreen = () => {
     console.warn(height);
     return height;
   };
+  
   const TitleState = useInputState();
   const NoteState = useInputState();
   const topState = useBottomNavigationState();
   const BackAction = () => (
-    <TopNavigationAction icon={BackIcon}/>
+    <TopNavigationAction icon={BackIcon} onPress={() => navigation.goBack()}/>
 
   );
   
   const renderRightTopNavigationAction = () =>
   (
-    <TopNavigationAction icon={BellIcon}/>
+    <TopNavigationAction icon={PinIcon}/>
   );
 
   
@@ -90,7 +97,7 @@ const NoteScreen = () => {
      <Divider/>
         <BottomNavigation style={{ height:10}} {...topState}>
           <BottomNavigationTab  icon={AddIcon} />
-          <BottomNavigationTab  icon={EmailIcon}/>
+          <BottomNavigationTab  icon={PinIcon}/>
         </BottomNavigation>
       {/* </React.Fragment> */}
     
