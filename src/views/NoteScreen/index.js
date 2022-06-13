@@ -40,7 +40,9 @@ const useBottomNavigationState = (initialState = 0) => {
 };
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const NoteScreen = () => {
+
+
+const NoteScreen = ({ navigation, route }) => {
   // const topState = useTabBarState();
   const find_dimesions = (layout)=>{
     const {x, y, width, height} = layout;
@@ -55,7 +57,7 @@ const NoteScreen = () => {
   const NoteState = useInputState();
   const topState = useBottomNavigationState();
   const BackAction = () => (
-    <TopNavigationAction icon={BackIcon}/>
+    <TopNavigationAction icon={BackIcon} onPress={() => navigation.goBack()}/>
 
   );
   
