@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert,Pressable,StyleSheet ,Dimensions} from 'react-native';
+import {Alert,Pressable,StyleSheet ,Dimensions,SafeAreaView} from 'react-native';
 import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab,Layout, Menu,  MenuItem,OverflowMenu  } from '@ui-kitten/components';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -12,6 +12,15 @@ const UnPinIcon = (props) =>
 (
   <Icon {...props} name='pin-off' pack='material' />
 )
+const ArchiveIcon = (props) => 
+(
+  <Icon {...props} name='archive-arrow-down'  pack='material' />
+);
+const UnArchiveIcon = (props) => 
+(
+  <Icon {...props} name='archive-arrow-up'  pack='material' />
+);
+
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back' />
 );
@@ -60,6 +69,7 @@ const NoteScreen = ({ navigation, route }) => {
   };
   const [EditTextState,setEditTextState] = React.useState("Thời gian chỉnh sửa note");
   const [PinState,setPinSate] = React.useState(false);
+  const [ArchiveState,setArchiveState] = React.useState(false);
   const TitleState = useInputState();
   const NoteState = useInputState();
   const topState = useBottomNavigationState();
@@ -82,6 +92,7 @@ const NoteScreen = ({ navigation, route }) => {
     <React.Fragment >
     <TopNavigationAction icon={PinState ? PinIcon : UnPinIcon} onPress={() => setPinSate(!PinState)}/>
     <TopNavigationAction icon={BellIcon } onPress={() => console.log("fadf")}/>
+    <TopNavigationAction icon={ArchiveState ? UnArchiveIcon : ArchiveIcon} onPress={() => setArchiveState(!ArchiveState)}/>
     </React.Fragment>
    
    
@@ -99,17 +110,18 @@ const NoteScreen = ({ navigation, route }) => {
       {/* <Divider/> */}
       <ScrollView style={{height:windowHeight}}>
         <Input
-          style={{padding: 10,fontSize:50,flex:1}}
+          style={{padding: 10,}}
           multiline={true}
-          // textStyle={{ minHeight: 50 }}
+          
           placeholder='Title'
           {...TitleState}
         />
-       
-          <Input
-        style={{ padding: 10,}}
-      
+      {/* chỗ nhập nội dung note   */}
+       <Input
+        style={{ padding: 10,height:'50%'}}
+         
           multiline={true}
+          textStyle={{ minHeight: 500 }}
           placeholder='Note'
           {...NoteState}
         />
@@ -117,16 +129,24 @@ const NoteScreen = ({ navigation, route }) => {
         </ScrollView>
         
      <Divider/>
-        <BottomNavigation style={{ height:10}} {...topState}>
-          <BottomNavigationTab  style={{minWidth:20}}icon={AddIcon} />
-          <Text style={{margin: 2,}} >{EditTextState} </Text>
-          <OverflowMenu style={{flex: 1,    margin: 8,}} anchor={renderMenuAction}
-        visible={menuVisible}
-        onBackdropPress={toggleMenu}>
+        {/* <BottomNavigation style={{ height:10,flex: 1, flexDirection: 'row',}} {...topState}> */}
+        <Layout style={{ flexDirection: 'row',    }}>
+
+       
+          {/* <BottomNavigationTab icon={AddIcon} style={{width:5,alignItems:'center'}}/> */}
+          <Button style={{margin: 2,}} accessoryLeft={AddIcon} appearance='ghost' status='basic' size='large'></Button>
+
+          <Text style={{flex:1,textAlign: 'center',fontSize: 15,marginTop: 19,}} >{EditTextState} </Text>
+          
+          <OverflowMenu style={{marginTop: 19, }} 
+          anchor={renderMenuAction}
+          visible={menuVisible}
+          onBackdropPress={toggleMenu}>
             <MenuItem accessoryLeft={BellIcon} title='fdasfjh' onPress={() => (setMenuVisible(!toggleMenu))}></MenuItem>
           </OverflowMenu >
-          
-        </BottomNavigation>
+         
+          </Layout>
+        {/* </BottomNavigation> */}
       {/* </React.Fragment> */}
     
       </Layout>
