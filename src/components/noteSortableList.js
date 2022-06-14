@@ -135,12 +135,6 @@ const window = Dimensions.get('window');
      flex: 1,
      justifyContent: 'center',
      alignItems: 'center',
-    //  backgroundColor: 'yellow',
-     ...Platform.select({
-       ios: {
-         paddingTop: 20,
-       },
-     }),
    },
    list: {
      flex: 1,

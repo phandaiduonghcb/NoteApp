@@ -94,7 +94,6 @@ const DrawerContent = ({ navigation, state }) => {
       </DrawerGroup>
       <DrawerItem accessoryLeft={ArhiveIcon} title='Archive'/>
 
-      <DrawerItem title='Tag' />
       <DrawerItem title='Note' />
     </Drawer>
   )
