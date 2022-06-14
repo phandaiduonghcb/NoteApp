@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Layout, Button, Icon, ButtonGroup } from '@ui-kitten/components'
+import { Layout, Button, Icon, ButtonGroup , useTheme} from '@ui-kitten/components'
 
 
 const ImageIcon = (props) => (
@@ -17,10 +17,11 @@ const AddIcon = (props) => (
 );
 
 const BottomBar = () => {
+    const theme= useTheme()
     return (
-        <Layout style={styles.topContainer}>
+        <Layout style={[styles.topContainer,{borderColor:theme['color-primary-500']}]}>
             <View style={styles.container}>
-                <ButtonGroup style={styles.buttonGroup} appearance='ghost' status='basic'>
+                <ButtonGroup style={styles.buttonGroup} appearance='ghost' status='primary'>
                     <Button accessoryLeft={ImageIcon} />
                     <Button accessoryLeft={TaskIcon} />
                     <Button accessoryLeft={MicIcon} />

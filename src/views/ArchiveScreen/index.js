@@ -6,8 +6,10 @@ import {
 import NoteCard from '../../components/noteCard';
 import SearchBar from '../../components/searchBar'
 import NoteSortableList from '../../components/noteSortableList';
+import BottomBar from '../../components/bottomBar'
+import ThemedActionButton from '../../components/themedActionButton'
 
-const Archive = ({ navigation }) => {
+const ArchiveScreen = ({ navigation }) => {
   return (
     // <Layout>
     //   {/* <View style={styles.container}> */}
@@ -30,6 +32,8 @@ const Archive = ({ navigation }) => {
       <SearchBar navigation={navigation} />
     </Layout>
       <NoteSortableList />
+      <BottomBar></BottomBar>
+      <ThemedActionButton navigation={navigation}/>
     </>
   )
 }
@@ -46,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Archive
+export default ArchiveScreen

@@ -2,11 +2,13 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   Layout,
+  useTheme
 } from '@ui-kitten/components';
 import NoteCard from '../../components/noteCard';
 import SearchBar from '../../components/searchBar'
 import NoteSortableList from '../../components/noteSortableList';
 import BottomBar from '../../components/bottomBar'
+import ThemedActionButton from '../../components/themedActionButton'
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -32,6 +34,7 @@ const HomeScreen = ({ navigation }) => {
     </Layout>
       <NoteSortableList />
       <BottomBar></BottomBar>
+      <ThemedActionButton navigation={navigation}/>
     </>
   )
 }
