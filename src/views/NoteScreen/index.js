@@ -2,6 +2,8 @@ import React from 'react';
 import {Alert,Pressable,StyleSheet ,Dimensions,SafeAreaView} from 'react-native';
 import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab,Layout, Menu,  MenuItem,OverflowMenu  } from '@ui-kitten/components';
 import { ScrollView } from 'react-native-gesture-handler';
+import BottomSheetAdd from '../../components/bottomSheetAdd';
+import { Provider } from 'react-native-paper';
 
 // var AntDesignICon = require('react-native-vector-icons/AntDesign')
 const PinIcon = (props) => (
@@ -74,7 +76,7 @@ const NoteScreen = ({ navigation, route }) => {
   const NoteState = useInputState();
   const topState = useBottomNavigationState();
   const [menuVisible, setMenuVisible] = React.useState(false);
-
+  const [showBotoomSheetAdd,setshowBotoomSheetAdd] = React.useState(false);
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -99,7 +101,11 @@ const NoteScreen = ({ navigation, route }) => {
   );
 
   
+
     return (
+      <Provider>
+
+     
      <Layout style={{flex: 1, flexDirection: 'column',}}>
 
      
@@ -121,20 +127,19 @@ const NoteScreen = ({ navigation, route }) => {
         style={{ padding: 10,height:'50%'}}
          
           multiline={true}
-          textStyle={{ minHeight: 500 }}
+    
           placeholder='Note'
           {...NoteState}
         />
 
         </ScrollView>
         
-     <Divider/>
         {/* <BottomNavigation style={{ height:10,flex: 1, flexDirection: 'row',}} {...topState}> */}
         <Layout style={{ flexDirection: 'row',    }}>
 
        
           {/* <BottomNavigationTab icon={AddIcon} style={{width:5,alignItems:'center'}}/> */}
-          <Button style={{margin: 2,}} accessoryLeft={AddIcon} appearance='ghost' status='basic' size='large'></Button>
+          <Button style={{margin: 2,}} accessoryLeft={AddIcon} appearance='ghost' status='basic' size='large' onPress={()=> setshowBotoomSheetAdd(true)}></Button>
 
           <Text style={{flex:1,textAlign: 'center',fontSize: 15,marginTop: 19,}} >{EditTextState} </Text>
           
@@ -148,9 +153,10 @@ const NoteScreen = ({ navigation, route }) => {
           </Layout>
         {/* </BottomNavigation> */}
       {/* </React.Fragment> */}
-    
-      </Layout>
+      <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => {setshowBotoomSheetAdd(false)}}></BottomSheetAdd>
 
+      </Layout>
+      </Provider>
     )
 }
 
