@@ -23,8 +23,21 @@ const RecordingIcon = (props) =>
 (
     <Icon {...props} name='mic-outline'/>
 );
-const BottomSheetAdd =({show,onDismiss, children}) => {
-    const bottomSheetAddHeight = Dimensions.get('window').height*0.27;
+const DeleteIcon = (props) => (
+    <Icon {...props} name='delete' pack='material'/>
+);
+const CopyIcon = (props) => (
+    <Icon {...props} name='content-copy' pack='material'/>
+
+);
+const LabelIcon = (props) =>
+(
+    <Icon {...props} name='label' pack='material'/>
+
+);
+
+const BottomSettingNote =({show,onDismiss, children}) => {
+    const bottomSheetAddHeight = Dimensions.get('window').height*0.21;
     const deviceWidth = Dimensions.get("window").width;
     const bottom = React.useRef(new Animated.Value(-bottomSheetAddHeight)).current;
     const [open,setOpen] = React.useState(show);
@@ -73,7 +86,7 @@ const BottomSheetAdd =({show,onDismiss, children}) => {
        
 
      
-        <Portal >
+        <Portal>
            
             {/* <OutsideClickHandler onOutsideClick={onDismiss}> */}
             <Animated.View style={[styles.root, {height:bottomSheetAddHeight,bottom:bottom,shadowOffset:{
@@ -100,20 +113,16 @@ const BottomSheetAdd =({show,onDismiss, children}) => {
                 
                 </PanGestureHandler>
                 <Menu style={{}} size='large'>
-                    <MenuItem  title='Take photo'  accessoryLeft={PhotoIcon} onPress={() => {
-                        console.log("Take a photo");
+                    <MenuItem  title='Delete'  accessoryLeft={DeleteIcon} onPress={() => {
+                        console.log("Delete");
                         onDismiss();
                     }}/>
-                    <MenuItem title='Add image' accessoryLeft={ImageIcon} onPress={() => {
-                        console.log("Add image");
+                    <MenuItem title='Make a copy' accessoryLeft={CopyIcon} onPress={() => {
+                        console.log("Make a copy");
                         onDismiss();
                     }}/>
-                    <MenuItem title='Checklists' accessoryLeft={checkIcon}  onPress={() => {
-                        console.log("Checklists");
-                        onDismiss();
-                    }}/>
-                    <MenuItem title='Recording' accessoryLeft={RecordingIcon}  onPress={() => {
-                        console.log("Checklists");
+                    <MenuItem title='Labels' accessoryLeft={LabelIcon} onPress={() => {
+                        console.log("Labels");
                         onDismiss();
                     }}/>
                 </Menu>
@@ -162,4 +171,4 @@ const styles = StyleSheet.create({
         margin: 2,
     }
 });
-export default BottomSheetAdd;
+export default BottomSettingNote;

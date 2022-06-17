@@ -3,7 +3,10 @@ import {Alert,Pressable,StyleSheet ,Dimensions,SafeAreaView} from 'react-native'
 import {Input, Button, Divider, Icon, Text, TopNavigation, TopNavigationAction,Tab, TabBar ,BottomNavigation, BottomNavigationTab,Layout, Menu,  MenuItem,OverflowMenu  } from '@ui-kitten/components';
 import { ScrollView } from 'react-native-gesture-handler';
 import BottomSheetAdd from '../../components/bottomSheetAdd';
+
 import { Provider } from 'react-native-paper';
+import BottomSettingNote from '../../components/bottomSettingNote';
+import SelectDate from '../../components/selectDate';
 
 // var AntDesignICon = require('react-native-vector-icons/AntDesign')
 const PinIcon = (props) => (
@@ -77,13 +80,15 @@ const NoteScreen = ({ navigation, route }) => {
   const topState = useBottomNavigationState();
   const [menuVisible, setMenuVisible] = React.useState(false);
   const [showBotoomSheetAdd,setshowBotoomSheetAdd] = React.useState(false);
+  const [showBotoomSettingNote,setshowBotoomSettingNote] = React.useState(false);
+  const [showSelectDate,setshowSelectDate] = React.useState(false);
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
-  const renderMenuAction = () => (
-    <TopNavigationAction icon={DotsVeticalIcon} onPress={toggleMenu}/>
-  );
+  // const renderMenuAction = () => (
+  //   <TopNavigationAction icon={DotsVeticalIcon} onPress={toggleMenu}/>
+  // );
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={() => navigation.goBack()}/>
 
@@ -93,7 +98,11 @@ const NoteScreen = ({ navigation, route }) => {
   (
     <React.Fragment >
     <TopNavigationAction icon={PinState ? PinIcon : UnPinIcon} onPress={() => setPinSate(!PinState)}/>
-    <TopNavigationAction icon={BellIcon } onPress={() => console.log("fadf")}/>
+    <TopNavigationAction icon={BellIcon } onPress={() => {
+      console.log("select date");
+      setshowSelectDate(!showSelectDate);
+
+    }}/>
     <TopNavigationAction icon={ArchiveState ? UnArchiveIcon : ArchiveIcon} onPress={() => setArchiveState(!ArchiveState)}/>
     </React.Fragment>
    
@@ -143,18 +152,14 @@ const NoteScreen = ({ navigation, route }) => {
 
           <Text style={{flex:1,textAlign: 'center',fontSize: 15,marginTop: 19,}} >{EditTextState} </Text>
           
-          <OverflowMenu style={{marginTop: 19, }} 
-          anchor={renderMenuAction}
-          visible={menuVisible}
-          onBackdropPress={toggleMenu}>
-            <MenuItem accessoryLeft={BellIcon} title='fdasfjh' onPress={() => (setMenuVisible(!toggleMenu))}></MenuItem>
-          </OverflowMenu >
+          <Button style={{margin:2,}} accessoryLeft={DotsVeticalIcon} appearance='ghost' status='basic' size='large' onPress={() => setshowBotoomSettingNote(true)}/>
          
           </Layout>
         {/* </BottomNavigation> */}
       {/* </React.Fragment> */}
       <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => {setshowBotoomSheetAdd(false)}}></BottomSheetAdd>
-
+      <BottomSettingNote show={showBotoomSettingNote}  onDismiss={() => setshowBotoomSettingNote(false)}/>
+      <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}></SelectDate>
       </Layout>
       </Provider>
     )
