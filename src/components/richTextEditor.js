@@ -122,7 +122,7 @@ const RichTextEditor = (props) => {
                 editor={richText}
                 iconTint={theme['color-primary-500']}
                 selectedIconTint={theme['color-danger-500']}
-                actions={[actions.setBold, actions.setItalic, actions.setUnderline, actions.insertImage, actions.checkboxList, 'exitKeyboard']}
+                actions={[actions.setBold, actions.setItalic, actions.setUnderline, actions.insertImage, 'exitKeyboard']}
                 onPressAddImage={() => {
                     // openCamera()
                     setVisible(true)
