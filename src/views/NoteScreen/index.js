@@ -161,7 +161,7 @@ const NoteScreen = ({ navigation, route }) => {
         <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} />
 
         <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
-                  date={selectedDate} time={selectedTime} 
+                  selectedDate={selectedDate} selectedTime={selectedTime} setSelectedDate={setSelectedDate} setSelectedTime={selectedTime}
             
             ></SelectDate>
                 {/* <Text> {selectedDate.toLocaleDateString()} </Text> */}

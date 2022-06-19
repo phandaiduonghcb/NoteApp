@@ -10,9 +10,9 @@ const  SelectDate= (props) => {
 
 
   // const [date, setDate] = React.useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(props.date);
+  // const [selectedDate, setSelectedDate] = useState(props.date);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(props.time);
+  // const [selectedTime, setSelectedTime] = useState(props.time);
   const [timePickerVisible, setTimePickerVisible] = useState(false);
   
   const showDatePicker = () => {
@@ -24,7 +24,7 @@ const  SelectDate= (props) => {
   };
 
   const handleConfirm = (date) => {
-    setSelectedDate(date);
+    props.setSelectedDate(date);
     hideDatePicker();
     
   };
@@ -38,7 +38,7 @@ const  SelectDate= (props) => {
   };
 
   const handleConfirmTime = (date) => {
-    setSelectedTime(date);
+    props.setSelectedTime(date);
     hideTimePicker();
   };
   return (
@@ -49,22 +49,22 @@ const  SelectDate= (props) => {
         <Text style={{margin: 10, textAlign: "center"}} status='basic' category='h3'> Add reminder</Text>
         {/* <Text style={{margin: 10, textAlign: "center"}} status='danger' category='h4'> Add a time</Text> */}
         <Text category='h6'>
-        Seleted time: {selectedDate ? selectedDate.toLocaleDateString([], { hour: '2-digit', minute: '2-digit' }) : 'No date selected'}
+        Seleted time: {props.selectedDate ? props.selectedDate.toLocaleDateString([], { hour: '2-digit', minute: '2-digit' }) : 'No date selected'}
         </Text>
       <Button style={{ margin: 2,}} onPress={showDatePicker}> Select a date</Button>
       <DateTimePickerModal
-          date={selectedDate}
+          date={props.selectedDate}
           isVisible={datePickerVisible}
           mode="date"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />
          <Text category='h6'>
-        Seleted time: {selectedTime ? selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'No date selected'}
+        Seleted time: {props.selectedTime ? props.selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'No date selected'}
         </Text>
       <Button style={{ margin: 2,}} onPress={showTimePicker}> Select a time</Button>
       <DateTimePickerModal
-          date={selectedTime}
+          date={props.selectedTime}
           isVisible={timePickerVisible}
           mode="time"
           onConfirm={handleConfirmTime}
