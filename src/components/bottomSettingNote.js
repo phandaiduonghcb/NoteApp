@@ -82,10 +82,6 @@ const BottomSettingNote =({show,onDismiss, children}) => {
     },[show]);
     return (
         
-
-       
-
-     
         <Portal>
            
             {/* <OutsideClickHandler onOutsideClick={onDismiss}> */}

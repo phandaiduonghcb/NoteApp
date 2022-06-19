@@ -46,6 +46,10 @@ const AddIcon = (props) => (
 const EmailIcon = (props) => (
   <Icon {...props} name='email-outline' />
 );
+const RecordingIcon = (props) =>
+(
+    <Icon {...props} name='mic-outline'/>
+);
 const useInputState = (initialValue = '') => {
   const [value, setValue] = React.useState(initialValue);
   return { value, onChangeText: setValue };
@@ -62,27 +66,25 @@ const useBottomNavigationState = (initialState = 0) => {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-let titleY
+
 const NoteScreen = ({ navigation, route }) => {
-  // const topState = useTabBarState();
-  const find_dimesions = (layout) => {
-    const { x, y, width, height } = layout;
-    console.warn(x);
-    console.warn(y);
-    console.warn(width);
-    console.warn(height);
-    return height;
-  };
+ 
   const [EditTextState, setEditTextState] = React.useState("Thời gian chỉnh sửa note");
-  const [PinState, setPinSate] = React.useState(false);
-  const [ArchiveState, setArchiveState] = React.useState(false);
-  const TitleState = useInputState();
-  const NoteState = useInputState();
-  const topState = useBottomNavigationState();
+  const [PinState, setPinSate] = React.useState(false); // State có ghim note hay không
+  const [ArchiveState, setArchiveState] = React.useState(false); // State có thêm note và archive hay không
+  const TitleState = useInputState(); // State cho việc hiện title 
+  // const NoteState = useInputState();
+  // const topState = useBottomNavigationState();
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const [showBotoomSheetAdd, setshowBotoomSheetAdd] = React.useState(false);
-  const [showBotoomSettingNote, setshowBotoomSettingNote] = React.useState(false);
+  const [showBottomSheetAdd, setshowBotoomSheetAdd] = React.useState(false);
+  const [showBottomSettingNote, setshowBottomSettingNote] = React.useState(false);
   const [showSelectDate, setshowSelectDate] = React.useState(false);
+  // State chhọn ngày và giờ 
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  // const [datePickerVisible, setDatePickerVisible] = React.useState(false);
+  const [selectedTime, setSelectedTime] = React.useState(new Date());
+  // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
+  
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -146,18 +148,24 @@ const NoteScreen = ({ navigation, route }) => {
 
 
           {/* <BottomNavigationTab icon={AddIcon} style={{width:5,alignItems:'center'}}/> */}
-          <Button style={{ margin: 2, }} accessoryLeft={AddIcon} appearance='ghost' status='basic' size='large' onPress={() => setshowBotoomSheetAdd(true)}></Button>
+          <Button style={{ margin: 2, }} accessoryLeft={RecordingIcon} appearance='ghost' status='basic' size='large' onPress={()=> console.log("Recording")}></Button>
 
           <Text style={{ flex: 1, textAlign: 'center', fontSize: 15, marginTop: 19, }} >{EditTextState} </Text>
 
-          <Button style={{ margin: 2, }} accessoryLeft={DotsVeticalIcon} appearance='ghost' status='basic' size='large' onPress={() => setshowBotoomSettingNote(true)} />
+          <Button style={{ margin: 2, }} accessoryLeft={DotsVeticalIcon} appearance='ghost' status='basic' size='large' onPress={() => setshowBottomSettingNote(true)} />
 
         </Layout>
         {/* </BottomNavigation> */}
         {/* </React.Fragment> */}
-        <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => { setshowBotoomSheetAdd(false) }}></BottomSheetAdd>
-        <BottomSettingNote show={showBotoomSettingNote} onDismiss={() => setshowBotoomSettingNote(false)} />
-        <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}></SelectDate>
+        {/* <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => { setshowBotoomSheetAdd(false) }}></BottomSheetAdd> */}
+        <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} />
+
+        <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
+                  date={selectedDate} time={selectedTime} 
+            
+            ></SelectDate>
+                {/* <Text> {selectedDate.toLocaleDateString()} </Text> */}
+
       </Layout>
     </Provider>
   )
