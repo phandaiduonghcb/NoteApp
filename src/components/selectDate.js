@@ -44,6 +44,11 @@ const  SelectDate= (props) => {
   //   setSelectedTime(date);
   //   hideTimePicker();
   // };
+  const handleCancel = () =>
+  {
+    setSelectedDate(props.selectedDate);
+    props.setIsVisible(false);
+  }; 
   const handleSave =() =>
   {
     props.setSelectedDate(selectedDate);
@@ -93,7 +98,7 @@ const  SelectDate= (props) => {
         <Layout style={{flexDirection:'row',marginTop:10}}>
           
             <Button style={{margin:5}} appearance='ghost' status='success' disabled={selectedDate == undefined ? true : false} onPress={handleDelete}>Delete</Button>
-            <Button style={{margin:5}} appearance='ghost' status='basic' onPress={() => props.setIsVisible(false)}>Cancel</Button>
+            <Button style={{margin:5}} appearance='ghost' status='basic' onPress={handleCancel}>Cancel</Button>
             <Button style={{margin:5}} appearance='ghost' status='info' onPress={handleSave}>Save</Button>
             
         </Layout>
