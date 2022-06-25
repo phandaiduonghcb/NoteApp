@@ -66,7 +66,7 @@ const useBottomNavigationState = (initialState = 0) => {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-
+let titleY;
 const NoteScreen = ({ navigation, route }) => {
  
   const [EditTextState, setEditTextState] = React.useState("Thời gian chỉnh sửa note");
@@ -80,9 +80,9 @@ const NoteScreen = ({ navigation, route }) => {
   const [showBottomSettingNote, setshowBottomSettingNote] = React.useState(false);
   const [showSelectDate, setshowSelectDate] = React.useState(false);
   // State chhọn ngày và giờ 
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [selectedDate, setSelectedDate] = React.useState();
   // const [datePickerVisible, setDatePickerVisible] = React.useState(false);
-  const [selectedTime, setSelectedTime] = React.useState(new Date());
+  const [selectedTime, setSelectedTime] = React.useState();
   // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
   
   const toggleMenu = () => {
@@ -162,9 +162,9 @@ const NoteScreen = ({ navigation, route }) => {
 
         <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
                   selectedDate={selectedDate} selectedTime={selectedTime} setSelectedDate={setSelectedDate} setSelectedTime={selectedTime}
-            
+                    setIsVisible={setshowSelectDate}
             ></SelectDate>
-                {/* <Text> {selectedDate.toLocaleDateString()} </Text> */}
+                {/* <Text> {selectedDate ? selectedDate.toLocaleString() : "no date"} </Text> */}
 
       </Layout>
     </Provider>
