@@ -37,7 +37,7 @@ const HomeScreen = ({ navigation }) => {
     <Layout>
       <SearchBar navigation={navigation} />
     </Layout>
-      <NoteSortableList />
+      <NoteSortableList navigation={navigation}/>
       <BottomBar></BottomBar>
       <ThemedActionButton navigation={navigation} />
     </>
