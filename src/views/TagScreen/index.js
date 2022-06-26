@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableWithoutFeedback, View, FlatList } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, View, FlatList } from 'react-native';
 import {
   Icon, Text, Input, Button,
   Layout,
@@ -29,42 +29,29 @@ const TagScreen = ({ navigation }) => {
       navigation.goBack()
     }} />
   );
-
-  const renderLeftAddButton = (props) => (
-    <Button
-      size="medium"
-      appearance='ghost'
-      status='primary'
-      accessoryLeft={<Icon {...props} name={value != '' ? 'close-outline' : 'plus-outline'} />}
-      onPress={() => {
-        if (value != '') {
-          setValue("")
-        }
-      }}>
-    </Button>
-  );
-
-  const renderRightAddButton = (props) => (
-    <Button
-      accessoryLeft={<Icon {...props} name='checkmark' />}
-      appearance='ghost'
-      status='primary'
-      onPress={() => {
-
-      }}
-    >
-    </Button>
-  );
-
-  const Item = ({ tag }) => {
+  const AddInput = ({ tag }) => {
     const renderLeftItemButton = (props) => {
       return (
         <Button
           size="medium"
           appearance='ghost'
           status='primary'
-          accessoryLeft={<Icon {...props} name='bookmark-outline' />}
-          >
+          accessoryLeft={<Icon {...props} name='plus-outline' />}
+        >
+        </Button>
+      )
+    }
+    const renderRightItemButton = (props) => {
+      return (
+        <Button
+          size="medium"
+          appearance='ghost'
+          status='primary'
+          accessoryLeft={<Icon {...props} name='checkmark-outline' />}
+          onPress={() => {
+            addTag(ivalue)
+          }}
+        >
         </Button>
       )
     }
@@ -73,23 +60,64 @@ const TagScreen = ({ navigation }) => {
     return (
       <View>
         <Input
+          placeholder="Enter tag here..."
           multiline={true}
           size="medium"
           value={ivalue}
           accessoryLeft={renderLeftItemButton}
-          accessoryRight={renderRightAddButton}
+          accessoryRight={renderRightItemButton}
+          onChangeText={nextValue => setIValue(nextValue)}
+        />
+      </View >
+    )
+  }
+
+  const Item = ({ item }) => {
+    const renderLeftItemButton = (props) => {
+      return (
+        <Button
+          size="medium"
+          appearance='ghost'
+          status='primary'
+          accessoryLeft={<Icon {...props} name='bookmark-outline' />}
+        >
+        </Button>
+      )
+    }
+    const renderRightItemButton = (props) => {
+      return (
+        <Button
+          size="medium"
+          appearance='ghost'
+          status='primary'
+          accessoryLeft={<Icon {...props} name='trash-2-outline' />}
+          onPress={() => {
+            deleteTag(item.tag)
+          }}
+        >
+        </Button>
+      )
+    }
+    const [ivalue, setIValue] = React.useState(item.tag)
+    // const [iactivte, setIActive] = React.useState('')
+    return (
+      <View>
+        <Input
+          multiline={true}
+          size="medium"
+          value={ivalue}
+          accessoryLeft={renderLeftItemButton}
+          accessoryRight={renderRightItemButton}
           onChangeText={nextValue => setIValue(nextValue)}
         />
       </View >
     )
   }
   const renderItem = ({ item }) => (
-    <Item tag={item.tag} />
+    <Item item={item} />
   );
 
-
-  const [value, setValue] = React.useState('');
-  const [tags, setTags] = React.useState({})
+  const [tags, setTags] = React.useState([])
 
   const createTables = () => {
     db.transaction(txn => {
@@ -114,22 +142,82 @@ const TagScreen = ({ navigation }) => {
           console.log("tags retrieved successfully");
           let len = res.rows.length;
           console.log('Number of records:', len)
+          if (len==0) setTags([])
           if (len > 0) {
-            let results = {};
+            let results = []
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i);
-              results[item.id] = { title: item.title, body: item.body, alarm: item.alarm };
+              results.push(item)
             }
-
-            setDATA(results)
+            console.log(results)
+            setTags(results)
           }
         },
         error => {
-          console.log("error on getting categories " + error.message);
+          console.log("error on getting tags " + error.message);
         },
       );
     });
   }
+  const deleteTag = (tag) => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `DELETE FROM tags WHERE tag=(?)`,
+        [tag],
+        (sqlTxn, res) => {
+          console.log(`${tag} tag deleted successfully`);
+          console.log(tags)
+          getTags();
+        },
+        error => {
+          console.log("error on deleting tag " + error.message);
+        },
+      );
+    });
+  }
+  const addTag = (tag) => {
+    if (tag=='') {
+      alert("Enter tag");
+      return false;
+    }
+
+    db.transaction(txn => {
+      txn.executeSql(
+        `SELECT * FROM tags ORDER BY tag DESC`,
+        [],
+        (sqlTxn, res) => {
+          console.log("tags retrieved successfully");
+          let len = res.rows.length;
+          console.log('Number of records:', len)
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              let item = res.rows.item(i);
+              if (item.tag == tag){
+                alert('Tag already exists')
+                return false;
+              }
+            }
+          }
+        },
+        error => {
+          console.log("error on getting tags " + error.message);
+        },
+      );
+    });
+    db.transaction(txn => {
+      txn.executeSql(
+        `INSERT INTO tags (tag,ids) VALUES (?,?)`,
+        [tag,''],
+        (sqlTxn, res) => {
+          console.log(`${tag} tag added successfully`);
+        },
+        error => {
+          console.log("error on adding tag " + error.message);
+        },
+      );
+    });
+    getTags();
+  };
   React.useEffect(() => {
     async function FetchData() {
       await createTables();
@@ -145,28 +233,30 @@ const TagScreen = ({ navigation }) => {
     }
   }, [navigation]);
 
+  const getHeader = () => {
+    return (
+      <>
+        <TopNavigation
+          accessoryLeft={BackAction}
+          title='Modify tags'
+          placeholder='Add a tag here!'
+        />
+        <AddInput tag='' ></AddInput>
+      </>
+    )
+  }
+
   return (
     <Layout>
-      <TopNavigation
-        accessoryLeft={BackAction}
-        title='Modify tags'
-        placeholder='Add a tag here!'
-      />
-      <ScrollView style={{ height: '100%' }}>
-        <Input
-          multiline={true}
-          size="medium"
-          value={value}
-          accessoryLeft={renderLeftAddButton}
-          accessoryRight={renderRightAddButton}
-          onChangeText={nextValue => setValue(nextValue)}
-        />
+      <KeyboardAvoidingView>
         <FlatList
-          data={TAGS}
+          removeClippedSubviews={false}
+          data={tags}
           renderItem={renderItem}
           keyExtractor={item => item.tag}
+          ListHeaderComponent={getHeader}
         />
-      </ScrollView>
+      </KeyboardAvoidingView>
     </Layout>
   )
 }
