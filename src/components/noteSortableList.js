@@ -118,7 +118,7 @@ const window = Dimensions.get('window');
    );
  }
  
- const NoteSortableList = ({isFocused}) => {
+ const NoteSortableList = ({navigation}) => {
   const [DATA, setDATA] = React.useState({1:''})
   const createTables = () => {
     db.transaction(txn => {
@@ -149,7 +149,7 @@ const window = Dimensions.get('window');
               let item = res.rows.item(i);
               results[item.id] = {title: item.title, body: item.body, alarm: item.alarm };
             }
-
+  
             setDATA(results)
           }
         },
@@ -164,9 +164,15 @@ const window = Dimensions.get('window');
       await createTables();
       await getNotes();
     }
-    console.log('Fetching..')
-    FetchData()
-  }, []);
+    
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Fetching..')
+      FetchData();
+    });
+    return () => {
+      unsubscribe;
+    }
+  }, [navigation]);
 
   // if (isFocused){
   //   async function FetchData () {
