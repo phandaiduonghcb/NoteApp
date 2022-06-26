@@ -13,6 +13,7 @@ import SelectDate from '../../components/selectDate';
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { openDatabase } from "react-native-sqlite-storage";
+import { back } from 'react-native/Libraries/Animated/Easing';
 
 const db = openDatabase({
   name: "rn_sqlite",
@@ -90,20 +91,29 @@ const NoteScreen = ({ navigation}) => {
   const [EditTextState, setEditTextState] = React.useState("Thời gian chỉnh sửa note");
   const [PinState, setPinSate] = React.useState(false); // State có ghim note hay không
   const [ArchiveState, setArchiveState] = React.useState(false); // State có thêm note và archive hay không
-  const TitleState = useInputState(); // State cho việc hiện title 
+  // const TitleState = useInputState(); // State cho việc hiện title 
   // const NoteState = useInputState();
   // const topState = useBottomNavigationState();
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const [showBottomSheetAdd, setshowBotoomSheetAdd] = React.useState(false);
+  // const [showBottomSheetAdd, setshowBotoomSheetAdd] = React.useState(false);
   const [showBottomSettingNote, setshowBottomSettingNote] = React.useState(false);
   const [showSelectDate, setshowSelectDate] = React.useState(false);
   // State chhọn ngày và giờ 
   const [selectedDate, setSelectedDate] = React.useState();
   // const [datePickerVisible, setDatePickerVisible] = React.useState(false);
-  const [selectedTime, setSelectedTime] = React.useState();
+  // const [selectedTime, setSelectedTime] = React.useState();
   // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
-
   const [title, setTitle] = React.useState('');
+  const resetState = () => {
+      setPinSate(false);
+      setArchiveState(false);
+      setTitle('');
+      setMenuVisible(false);
+      setshowBottomSettingNote(false);
+      setshowSelectDate(false);
+      setSelectedDate(undefined);
+  };
+  
   
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -111,20 +121,28 @@ const NoteScreen = ({ navigation}) => {
   // const renderMenuAction = () => (
   //   <TopNavigationAction icon={DotsVeticalIcon} onPress={toggleMenu}/>
   // );
+  const Back= async () => {
+    if (title == NOTE_TITLE  ){
+      // console.log(NOTE_TITLE, NOTE_BODY)
+      createTables()
+      addNote(NOTE_TITLE, NOTE_BODY, '123');
+      setTitle('')
+      NOTE_BODY=undefined;
+      NOTE_TITLE=undefined;
+      // getNotes();
+    }
+    
+    navigation.goBack();
+    resetState();
+  }
+  // BackHandler.addEventListener("hardwareBackPress",Back);
+  React.useEffect(() => {
+    const backhandler = BackHandler.addEventListener("hardwareBackPress",Back);
+    return () => backhandler.remove();
+    // return false;
+  });
   const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={() => {
-      if (title == NOTE_TITLE) {
-        // console.log(NOTE_TITLE, NOTE_BODY)
-        createTables()
-        addNote(NOTE_TITLE, NOTE_BODY, '123');
-        setTitle('')
-        NOTE_BODY=undefined;
-        NOTE_TITLE=undefined;
-        // getNotes();
-      }
-      
-      navigation.goBack();
-    }} />
+    <TopNavigationAction icon={BackIcon} onPress={Back} />
 
   );
   // const [category, setCategory] = useState("");
@@ -205,19 +223,21 @@ const NoteScreen = ({ navigation}) => {
 
 
   );
-
-  BackHandler.addEventListener('hardwareBackPress', () => {
-    if (title == NOTE_TITLE) {
-      // console.log(NOTE_TITLE, NOTE_BODY)
-      createTables()
-      addNote(NOTE_TITLE, NOTE_BODY, '123');
-      // getNotes();
-    }
-    // let isEmpty = Object.keys(note).length === 0;
-    // if (isEmpty) {
-    //   console.log("nothing is done")
-    // }
-  })
+ 
+  // BackHandler.addEventListener('hardwareBackPress', () => {
+    
+  //   if (title == NOTE_TITLE) {
+  //     // console.log(NOTE_TITLE, NOTE_BODY)
+  //     createTables()
+  //     addNote(NOTE_TITLE, NOTE_BODY, '123');
+  //     // getNotes();
+  //   }
+  //   resetState();
+  //   // let isEmpty = Object.keys(note).length === 0;
+  //   // if (isEmpty) {
+  //   //   console.log("nothing is done")
+  //   // }
+  // })
   return (
     <Provider>
 
@@ -278,7 +298,7 @@ const NoteScreen = ({ navigation}) => {
         <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} />
 
         <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
-                  selectedDate={selectedDate} selectedTime={selectedTime} setSelectedDate={setSelectedDate} setSelectedTime={selectedTime}
+                  selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
                     setIsVisible={setshowSelectDate}
             ></SelectDate>
                 {/* <Text> {selectedDate ? selectedDate.toLocaleString() : "no date"} </Text> */}
