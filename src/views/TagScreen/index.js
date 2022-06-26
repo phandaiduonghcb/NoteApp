@@ -1,40 +1,46 @@
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import SearchBar from '../../components/searchBar';
+import { StyleSheet, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import {
+  Icon, Text, Input,
   Layout,
+  TopNavigation, TopNavigationAction
 } from '@ui-kitten/components';
-import NoteCard from '../../components/noteCard';
-import NoteSortableList from '../../components/noteSortableList';
-import BottomBar from '../../components/bottomBar'
-import ThemedActionButton from '../../components/themedActionButton'
+const BackIcon = (props) => (
+  <Icon {...props} name='arrow-back' />
+);
 
 const TagScreen = ({ navigation }) => {
+
+  const BackAction = () => (
+    <TopNavigationAction icon={BackIcon} onPress={() => {
+      navigation.goBack()
+    }} />
+  );
+  const toggleActive = () => {
+    setActive(!active);
+  };
+  const renderLeftIcon = (props) => (
+    <TouchableWithoutFeedback onPress={toggleActive}>
+      <Icon {...props} name={active ? 'close-outline' : 'plus-outline'}/>
+    </TouchableWithoutFeedback>
+  );
+
+  const [value, setValue] = React.useState('');
+  const [active, setActive] = React.useState(false)
+
   return (
-    // <Layout>
-    //   {/* <View style={styles.container}> */}
-    //     <SearchBar navigation={navigation} />
-    //     {/* <Layout style={styles.layoutContainer} level='4'>
-    //       <NoteCard style={styles.card} content='akjsndakljnsdkjnasd'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjasdasdddddddddddddsn'></NoteCard>
-    //       <NoteCard style={styles.card} content='andjk'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjsndakljnsdkjnasd'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjasdasdddddddddddddsn'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjsndakljnsdkjnasd'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjasdasdddddddddddddsn'></NoteCard>
-    //       <NoteCard style={styles.card} content='andjk'></NoteCard>
-    //       <NoteCard style={styles.card} content='andjk'></NoteCard>
-    //       <NoteCard style={styles.card} content='duong'></NoteCard>
-    //     </Layout> */}
-    //   {/* </View> */}
-    // </Layout>
-    <><Layout>
-      <SearchBar navigation={navigation} />
+    <Layout>
+      <TopNavigation
+        accessoryLeft={BackAction}
+        title='Modify tags'
+        placeholder='Add a tag here!'
+      />
+      <Input
+        value={value}
+        accessoryLeft={renderLeftIcon}
+
+      />
     </Layout>
-      <NoteSortableList />
-      <BottomBar></BottomBar>
-      <ThemedActionButton navigation={navigation}/>
-    </>
   )
 }
 

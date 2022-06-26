@@ -54,28 +54,30 @@ const Footer = (props) => (
 const DrawerContent = ({ navigation, state }) => {
 
   const navigate = (navigation, index) => {
-    if (index.row==0){
+    // console.log(index)
+    if (index.row==0 && index.section==undefined ){
       navigation.navigate('Home')
     }
-    else if (index.row==1){
+    else if (index.row==1 && index.section==undefined ){
       // navigation.navigate('')
     }
     else if (index.section==undefined && index.row==2)
     {
       //Ko lam gi het
+      console.log('Group')
     }
-    else if (index.section==2 && index.row==0)
-    {
-      navigation.navigate('Home')
-    }
-    else if (index.section==2 && index.row==1)
+    else if (index.row==0 && index.section==2)
     {
       navigation.navigate('Tag')
     }
-    else if (index.row==3){
+    else if (index.row==1 && index.section==2)
+    {
+      
+    }
+    else if (index.row==3 && index.section==undefined ){
       navigation.navigate('Archive')
     }
-    else if (index.row==4){
+    else if (index.row==4  && index.section==undefined ){
       navigation.navigate('Note')
     }
   }
