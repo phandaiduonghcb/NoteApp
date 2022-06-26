@@ -13,16 +13,8 @@ import ThemedActionButton from '../../components/themedActionButton'
 import { useIsFocused } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
-//   const [count, setCount] = React.useState(0)
-//   React.useEffect(() => {
-//     navigation.addListener(
-//         'focus',
-//         payload => {
-//             setCount(count+1)
-//             console.log(count)
-//         }
-//     );
-// }, [])
+  let isFocused = useIsFocused();
+  console.log('Focused:',isFocused);
   return (
     // <Layout>
     //   {/* <View style={styles.container}> */}

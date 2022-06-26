@@ -116,7 +116,7 @@ const NoteScreen = ({ navigation}) => {
         // getNotes();
       }
       
-      navigation.goBack()
+      navigation.goBack();
     }} />
 
   );
