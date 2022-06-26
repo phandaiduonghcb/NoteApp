@@ -21,49 +21,6 @@ const db = openDatabase({
 
 const window = Dimensions.get('window');
  
- const data = {
-   0: {
-     title: 'https://placekitten.com/200/240',
-     content: 'Chloe',
-   },
-   1: {
-     title: 'https://placekitten.com/200/201',
-     content: 'Jasper',
-   },
-   2: {
-     title: 'https://placekitten.com/200/202',
-     content: 'Pepper',
-   },
-   3: {
-     title: 'https://placekitten.com/200/203',
-     content: 'Oscar',
-   },
-   4: {
-     title: 'https://placekitten.com/200/204',
-     content: 'Dusty',
-   },
-   5: {
-     title: 'https://placekitten.com/200/205',
-     content: 'Spooky',
-   },
-   6: {
-     title: 'https://placekitten.com/200/210',
-     content: 'sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
-   },
-   7: {
-     title: 'https://placekitten.com/200/215',
-     content: 'Smokey',
-   },
-   8: {
-     title: 'https://placekitten.com/200/220',
-     content: 'Gizmo',
-   },
-   9: {
-     title: 'https://placekitten.com/220/239',
-     content: 'Kitty',
-   },
- };
- 
  function Row(props) {
    const {active, data} = props;
  
