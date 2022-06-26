@@ -2,15 +2,27 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   Layout,
-  useTheme
+  useTheme,
+  Text
 } from '@ui-kitten/components';
 import NoteCard from '../../components/noteCard';
 import SearchBar from '../../components/searchBar'
 import NoteSortableList from '../../components/noteSortableList';
 import BottomBar from '../../components/bottomBar'
 import ThemedActionButton from '../../components/themedActionButton'
+import { useIsFocused } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
+//   const [count, setCount] = React.useState(0)
+//   React.useEffect(() => {
+//     navigation.addListener(
+//         'focus',
+//         payload => {
+//             setCount(count+1)
+//             console.log(count)
+//         }
+//     );
+// }, [])
   return (
     // <Layout>
     //   {/* <View style={styles.container}> */}
@@ -29,12 +41,13 @@ const HomeScreen = ({ navigation }) => {
     //     </Layout> */}
     //   {/* </View> */}
     // </Layout>
-    <><Layout>
+    <>
+    <Layout>
       <SearchBar navigation={navigation} />
     </Layout>
       <NoteSortableList />
       <BottomBar></BottomBar>
-      <ThemedActionButton navigation={navigation}/>
+      <ThemedActionButton navigation={navigation} />
     </>
   )
 }

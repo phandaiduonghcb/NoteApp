@@ -11,6 +11,13 @@ import {
 import SortableList from 'react-native-sortable-list';
 import { Text, Layout } from '@ui-kitten/components'
 import NoteCard from './noteCard';
+import { useIsFocused } from '@react-navigation/native';
+
+import { openDatabase } from "react-native-sqlite-storage";
+
+const db = openDatabase({
+  name: "rn_sqlite",
+});
 
 const window = Dimensions.get('window');
  
@@ -112,6 +119,70 @@ const window = Dimensions.get('window');
  }
  
  const NoteSortableList = () => {
+  const isFocused = useIsFocused();
+  console.log(isFocused)
+  const [DATA, setDATA] = React.useState({9: {
+    title: 'https://placekitten.com/220/239',
+    content: 'Kitty',
+  },})
+  const createTables = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT, alarm TEXT)`,
+        [],
+        (sqlTxn, res) => {
+          console.log("table created successfully");
+        },
+        error => {
+          console.log("error on creating table " + error.message);
+        },
+      );
+    });
+  };
+  const getNotes = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `SELECT * FROM notes ORDER BY id DESC`,
+        [],
+        (sqlTxn, res) => {
+          console.log("categories retrieved successfully");
+          let len = res.rows.length;
+          console.log('Number of records:',len)
+          if (len > 0) {
+            let results = {};
+            for (let i = 0; i < len; i++) {
+              let item = res.rows.item(i);
+              results[item.id] = {title: item.title, body: item.body, alarm: item.alarm };
+            }
+
+            setDATA(results)
+          }
+        },
+        error => {
+          console.log("error on getting categories " + error.message);
+        },
+      );
+    });
+  }
+  React.useEffect(() => {
+    async function FetchData () {
+      await createTables();
+      await getNotes();
+    }
+    console.log('Fetching..')
+    FetchData()
+  }, []);
+
+  // if (isFocused){
+  //   async function FetchData () {
+  //     await createTables();
+  //     await getNotes();
+  //   }
+  //   console.log('Fetching..')
+  //   FetchData()
+  // }
+
+
    const renderRow = useCallback(({data, active}) => {
      return <Row data={data} active={active} />;
    }, []);
@@ -122,7 +193,7 @@ const window = Dimensions.get('window');
        <SortableList
          style={styles.list}
          contentContainerStyle={styles.contentContainer}
-         data={data}
+         data={DATA}
          renderRow={renderRow}
        />
        </Layout>

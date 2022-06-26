@@ -79,7 +79,7 @@ let NOTE_BODY
 let NOTE_TITLE
 let NOTE_ALARM
 let titleY;
-const NoteScreen = ({ navigation, route }) => {
+const NoteScreen = ({ navigation}) => {
 
   const [EditTextState, setEditTextState] = React.useState("Thời gian chỉnh sửa note");
   const [PinState, setPinSate] = React.useState(false); // State có ghim note hay không
@@ -106,11 +106,16 @@ const NoteScreen = ({ navigation, route }) => {
   // );
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={() => {
-      // let isEmpty = Object.keys(note).length === 0;
-      // if (isEmpty) {
-      //   console.log("nothing is done")
-      // }
-
+      if (title == NOTE_TITLE) {
+        // console.log(NOTE_TITLE, NOTE_BODY)
+        createTables()
+        addNote(NOTE_TITLE, NOTE_BODY, '123');
+        setTitle('')
+        NOTE_BODY=undefined;
+        NOTE_TITLE=undefined;
+        // getNotes();
+      }
+      
       navigation.goBack()
     }} />
 
@@ -199,7 +204,7 @@ const NoteScreen = ({ navigation, route }) => {
       // console.log(NOTE_TITLE, NOTE_BODY)
       createTables()
       addNote(NOTE_TITLE, NOTE_BODY, '123');
-      getNotes();
+      // getNotes();
     }
     // let isEmpty = Object.keys(note).length === 0;
     // if (isEmpty) {
