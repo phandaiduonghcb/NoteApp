@@ -121,10 +121,7 @@ const window = Dimensions.get('window');
  const NoteSortableList = () => {
   const isFocused = useIsFocused();
   console.log(isFocused)
-  const [DATA, setDATA] = React.useState({9: {
-    title: 'https://placekitten.com/220/239',
-    content: 'Kitty',
-  },})
+  const [DATA, setDATA] = React.useState({1:''})
   const createTables = () => {
     db.transaction(txn => {
       txn.executeSql(

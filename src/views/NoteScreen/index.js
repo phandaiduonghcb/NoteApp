@@ -33,7 +33,7 @@ const ArchiveIcon = (props) =>
 );
 const UnArchiveIcon = (props) =>
 (
-  <Icon {...props} name='archive-arrow-up' pack='material' />
+  <Icon {...props} name='archive-check' pack='material' />
 );
 
 const BackIcon = (props) => (
@@ -42,6 +42,9 @@ const BackIcon = (props) => (
 
 const BellIcon = (props) => (
   <Icon {...props} name='bell-outline' />
+);
+const UnBellICon = (props) => (
+  <Icon {...props} name='bell-off-outline' />
 );
 const DotsVeticalIcon = (props) => (
   <Icon {...props} name='dots-vertical' pack='material' />
@@ -58,6 +61,9 @@ const EmailIcon = (props) => (
 const RecordingIcon = (props) =>
 (
   <Icon {...props} name='mic-outline' />
+);
+const TaskIcon = (props) => (
+  <Icon {...props} name='checkmark-square' />
 );
 const useInputState = (initialValue = '') => {
   const [value, setValue] = React.useState(initialValue);
@@ -98,6 +104,7 @@ const NoteScreen = ({ navigation}) => {
   // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
 
   const [title, setTitle] = React.useState('');
+  
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -188,7 +195,7 @@ const NoteScreen = ({ navigation}) => {
   (
     <React.Fragment >
       <TopNavigationAction icon={PinState ? PinIcon : UnPinIcon} onPress={() => setPinSate(!PinState)} />
-      <TopNavigationAction icon={BellIcon} onPress={() => {
+      <TopNavigationAction icon={selectedDate== undefined ? UnBellICon : BellIcon} onPress={() => {
         console.log("select date");
         setshowSelectDate(!showSelectDate);
 
