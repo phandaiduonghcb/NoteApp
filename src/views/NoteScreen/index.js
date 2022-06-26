@@ -99,7 +99,7 @@ const NoteScreen = ({ navigation}) => {
   const [showBottomSettingNote, setshowBottomSettingNote] = React.useState(false);
   const [showSelectDate, setshowSelectDate] = React.useState(false);
   // State chhọn ngày và giờ 
-  const [selectedDate, setSelectedDate] = React.useState();
+  const [selectedDate, setSelectedDate] = React.useState(undefined);
   // const [datePickerVisible, setDatePickerVisible] = React.useState(false);
   // const [selectedTime, setSelectedTime] = React.useState();
   // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
@@ -125,10 +125,11 @@ const NoteScreen = ({ navigation}) => {
     if (title == NOTE_TITLE  ){
       // console.log(NOTE_TITLE, NOTE_BODY)
       createTables()
-      addNote(NOTE_TITLE, NOTE_BODY, '123');
+      addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
       setTitle('')
       NOTE_BODY=undefined;
       NOTE_TITLE=undefined;
+      resetState();
       // getNotes();
     }
     
@@ -214,7 +215,7 @@ const NoteScreen = ({ navigation}) => {
     <React.Fragment >
       <TopNavigationAction icon={PinState ? PinIcon : UnPinIcon} onPress={() => setPinSate(!PinState)} />
       <TopNavigationAction icon={selectedDate== undefined ? UnBellICon : BellIcon} onPress={() => {
-        console.log("select date");
+        console.log("select date",selectedDate);
         setshowSelectDate(!showSelectDate);
 
       }} />
@@ -296,12 +297,12 @@ const NoteScreen = ({ navigation}) => {
         {/* </React.Fragment> */}
         {/* <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => { setshowBotoomSheetAdd(false) }}></BottomSheetAdd> */}
         <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} />
-
+        {/* <Text> {selectedDate ? selectedDate.toLocaleString() : "no date"} </Text> */}
         <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
                   selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
                     setIsVisible={setshowSelectDate}
             ></SelectDate>
-                {/* <Text> {selectedDate ? selectedDate.toLocaleString() : "no date"} </Text> */}
+                
 
       </Layout>
     </Provider>

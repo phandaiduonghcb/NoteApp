@@ -9,6 +9,8 @@ const NoteCard = (props) => {
     <Animated.View style={props.style} >
        <View style={{height:'20%'}}><Text style={{}}>{props.data.title}</Text ></View>
        <View style={{height:'80%'}}><Text  style={{}}>{props.data.body}</Text></View>
+       <View style={{height:'80%'}}><Text  style={{}}>{props.data.alarm}</Text></View>
+       
     </Animated.View>
     )
 }
