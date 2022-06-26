@@ -2,10 +2,7 @@ import React from "react";
 import {Platform, KeyboardAvoidingView, StyleSheet, ScrollView, Keyboard, Dimensions } from "react-native";
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider, IconRegistry, Layout, useTheme } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import {Layout, useTheme } from '@ui-kitten/components';
 import { Text, Button, Card, Modal, Divider, Icon } from '@ui-kitten/components'
 
 const windowWidth = Dimensions.get('window').width;
@@ -13,6 +10,7 @@ const windowHeight = Dimensions.get('window').height;
 let Y = 0
 let HEIGHT = 0
 let HTML = ''
+
 const CameraIcon = (props) => (
     <Icon name='camera' {...props} />
 );
@@ -22,7 +20,8 @@ const UploadIcon = (props) => (
 );
 
 const RichTextEditor = (props) => {
-
+    props.a=4
+    console.log(props.a)
     let handleCursorPosition = React.useCallback((scrollY) => {
         // Positioning scroll bar
         scrollRef.current.scrollTo({ y: scrollY - 30, animated: true });
