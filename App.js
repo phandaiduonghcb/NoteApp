@@ -25,7 +25,7 @@
  export default () => (
    <>
      <IconRegistry icons={[EvaIconsPack,MaterialIconsPack]} />
-     <ApplicationProvider {...eva} theme={eva.dark}>
+     <ApplicationProvider {...eva} theme={eva.light}>
        <AppNavigator/>
      </ApplicationProvider>
    </>

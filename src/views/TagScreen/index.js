@@ -104,6 +104,13 @@ const TagScreen = ({ navigation }) => {
       <View>
         <Input
           multiline={true}
+          onBlur={() => {
+            if (ivalue != item.tag){
+              deleteTag(item.tag)
+              console.log('------')
+              addTag(ivalue,item.ids)
+            }
+          }}
           size="medium"
           value={ivalue}
           accessoryLeft={renderLeftItemButton}
@@ -175,7 +182,7 @@ const TagScreen = ({ navigation }) => {
       );
     });
   }
-  const addTag = (tag) => {
+  const addTag = (tag,ids='') => {
     if (tag=='') {
       alert("Enter tag");
       return false;
@@ -183,31 +190,8 @@ const TagScreen = ({ navigation }) => {
 
     db.transaction(txn => {
       txn.executeSql(
-        `SELECT * FROM tags ORDER BY tag DESC`,
-        [],
-        (sqlTxn, res) => {
-          console.log("tags retrieved successfully");
-          let len = res.rows.length;
-          console.log('Number of records:', len)
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              let item = res.rows.item(i);
-              if (item.tag == tag){
-                alert('Tag already exists')
-                return false;
-              }
-            }
-          }
-        },
-        error => {
-          console.log("error on getting tags " + error.message);
-        },
-      );
-    });
-    db.transaction(txn => {
-      txn.executeSql(
         `INSERT INTO tags (tag,ids) VALUES (?,?)`,
-        [tag,''],
+        [tag,ids],
         (sqlTxn, res) => {
           console.log(`${tag} tag added successfully`);
         },

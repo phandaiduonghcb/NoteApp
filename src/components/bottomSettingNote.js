@@ -36,7 +36,7 @@ const LabelIcon = (props) =>
 
 );
 
-const BottomSettingNote =({show,onDismiss, navigation}) => {
+const BottomSettingNote =({show,onDismiss, navigation, id}) => {
     const bottomSheetAddHeight = Dimensions.get('window').height*0.21;
     const deviceWidth = Dimensions.get("window").width;
     const bottom = React.useRef(new Animated.Value(-bottomSheetAddHeight)).current;
@@ -119,7 +119,7 @@ const BottomSettingNote =({show,onDismiss, navigation}) => {
                     }}/>
                     <MenuItem title='Labels' accessoryLeft={LabelIcon} onPress={() => {
                         console.log("Labels");
-                        navigation.navigate('ChooseTag')
+                        navigation.navigate('ChooseTag',{id:id})
                         onDismiss();
                     }}/>
                 </Menu>

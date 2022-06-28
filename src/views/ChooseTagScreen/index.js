@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, KeyboardAvoidingView, View, FlatList } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, View, FlatList, ScrollView } from 'react-native';
 import {
   useTheme,
   Icon, Text, Input, Button, CheckBox,
@@ -13,13 +13,14 @@ const db = openDatabase({
   name: "rn_sqlite",
 });
 
+
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back' />
 );
 
 
-const ChooseTagScreen = ({ navigation }) => {
-
+const ChooseTagScreen = ({ route, navigation }) => {
+  const { id } = route.params;
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={() => {
       navigation.goBack()
@@ -64,14 +65,6 @@ const ChooseTagScreen = ({ navigation }) => {
           accessoryRight={renderRightItemButton}
           onChangeText={nextValue => {
             setIValue(nextValue)
-            // let tempTags = []
-            // tags.forEach(item => {
-            //   if (item.tag.startsWith(nextValue)) {
-            //     tempTags.push(JSON.parse(JSON.stringify(item)))
-            //   }
-            // });
-
-            // setTags(tempTags)
           }}
         />
       </View >
@@ -94,21 +87,55 @@ const ChooseTagScreen = ({ navigation }) => {
 
       return (
         <CheckBox
-          style={{marginRight:'6%'}}
+          style={{ marginRight: '6%' }}
           checked={checked}
-          onChange={nextChecked => setChecked(nextChecked)}>
+          onChange={nextChecked => {
+            setChecked(nextChecked)
+            console.log(checked)
+            modifyTagIds(item, id, checked)
+          }}>
         </CheckBox>
       );
 
     }
+    const modifyTagIds = (tagItem, noteId, checked) => {
+      let ids = tagItem.ids
+      let resultIds
+      if (!checked) {
+        if (item.ids == '') {
+          resultIds = String(noteId)
+        }
+        else {
+          let idArray = item.ids.split(',')
+          idArray.push(noteId)
+          resultIds = idArray.toString()
+        }
+      }
+      else {
+        let idArray = item.ids.split(',')
+        let i = idArray.indexOf(String(id))
+        idArray.splice(i, 1); 
+        resultIds = idArray.toString()
+      }
+      deleteTag(item.tag)
+      addTag(item.tag, resultIds)
+    }
     const theme = useTheme();
-    const [checked, setChecked] = React.useState(false);
+    let initialValue
+    if (item.ids == '') {
+      initialValue = false;
+    }
+    else {
+      initialValue = item.ids.split(',').indexOf(String(id)) != -1
+    }
+    const [checked, setChecked] = React.useState(initialValue);
     const [ivalue, setIValue] = React.useState(item.tag)
+
     // const [iactivte, setIActive] = React.useState('')
     return (
       <View>
         <Input
-          textStyle={{ color: theme['color-basic-1100'] }}
+          textStyle={{ color: theme['text-basic-color'] }}
           disabled={true}
           multiline={true}
           size="medium"
@@ -141,6 +168,22 @@ const ChooseTagScreen = ({ navigation }) => {
       );
     });
   };
+  const deleteTag = (tag) => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `DELETE FROM tags WHERE tag=(?)`,
+        [tag],
+        (sqlTxn, res) => {
+          console.log(`${tag} tag deleted successfully`);
+          console.log(tags)
+          getTags();
+        },
+        error => {
+          console.log("error on deleting tag " + error.message);
+        },
+      );
+    });
+  }
   const getTags = () => {
     db.transaction(txn => {
       txn.executeSql(
@@ -167,7 +210,7 @@ const ChooseTagScreen = ({ navigation }) => {
       );
     });
   }
-  const addTag = (tag) => {
+  const addTag = (tag,ids='') => {
     if (tag == '') {
       alert("Enter tag");
       return false;
@@ -175,31 +218,8 @@ const ChooseTagScreen = ({ navigation }) => {
 
     db.transaction(txn => {
       txn.executeSql(
-        `SELECT * FROM tags ORDER BY tag DESC`,
-        [],
-        (sqlTxn, res) => {
-          console.log("tags retrieved successfully");
-          let len = res.rows.length;
-          console.log('Number of records:', len)
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              let item = res.rows.item(i);
-              if (item.tag == tag) {
-                alert('Tag already exists')
-                return false;
-              }
-            }
-          }
-        },
-        error => {
-          console.log("error on getting tags " + error.message);
-        },
-      );
-    });
-    db.transaction(txn => {
-      txn.executeSql(
         `INSERT INTO tags (tag,ids) VALUES (?,?)`,
-        [tag, ''],
+        [tag, ids],
         (sqlTxn, res) => {
           console.log(`${tag} tag added successfully`);
         },
@@ -239,17 +259,21 @@ const ChooseTagScreen = ({ navigation }) => {
   }
 
   return (
-    <Layout>
-      <KeyboardAvoidingView>
-        <FlatList
-          removeClippedSubviews={false}
-          data={tags}
-          renderItem={renderItem}
-          keyExtractor={item => item.tag}
-          ListHeaderComponent={getHeader}
-        />
-      </KeyboardAvoidingView>
-    </Layout>
+    <>
+      <Layout>{getHeader()}</Layout>
+      <Layout style={{ height: '100%' }}>
+        {/* {getHeader()} */}
+        <KeyboardAvoidingView>
+          <FlatList
+            contentContainerStyle={{ paddingBottom: '50%' }}
+            removeClippedSubviews={false}
+            data={tags}
+            renderItem={renderItem}
+            keyExtractor={item => item.tag}
+          />
+        </KeyboardAvoidingView>
+      </Layout>
+    </>
   )
 }
 
