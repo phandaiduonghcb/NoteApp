@@ -129,7 +129,7 @@ const window = Dimensions.get('window');
     return () => {
       unsubscribe;
     }
-  }, [navigation]);
+  }, []);
 
   // if (isFocused){
   //   async function FetchData () {
@@ -153,6 +153,10 @@ const window = Dimensions.get('window');
          contentContainerStyle={styles.contentContainer}
          data={DATA}
          renderRow={renderRow}
+         onPressRow={(index) => {
+          console.log("chon note: ", index);
+          navigation.navigate('Note',{id: index});
+         }}
        />
        </Layout>
     // </View>

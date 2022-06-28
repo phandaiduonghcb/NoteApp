@@ -86,8 +86,8 @@ let NOTE_BODY
 let NOTE_TITLE
 let NOTE_ALARM
 let titleY;
-const NoteScreen = ({ navigation}) => {
-
+const NoteScreen = ({ navigation,route}) => {
+  const {id} = route.params;
   const [EditTextState, setEditTextState] = React.useState("Thời gian chỉnh sửa note");
   const [PinState, setPinSate] = React.useState(false); // State có ghim note hay không
   const [ArchiveState, setArchiveState] = React.useState(false); // State có thêm note và archive hay không
@@ -104,6 +104,7 @@ const NoteScreen = ({ navigation}) => {
   // const [selectedTime, setSelectedTime] = React.useState();
   // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
   const [title, setTitle] = React.useState('');
+  
   const resetState = () => {
       setPinSate(false);
       setArchiveState(false);
@@ -132,7 +133,7 @@ const NoteScreen = ({ navigation}) => {
       resetState();
       // getNotes();
     }
-    
+    // navigation.push('Home');
     navigation.goBack();
     resetState();
   }
@@ -184,7 +185,45 @@ const NoteScreen = ({ navigation}) => {
       );
     });
   };
+  const getNote = (id) => {
+    
+    db.transaction(txn => {
+      txn.executeSql(
+        'SELECT * FROM notes where id = ?',
+        [id],
+        (txn,result) => {
+          var len = result.rows.length;
+          if (len > 0)
+          {
+            console.log("co id nhen");
+            setTitle(result.rows.item(0).title);
+          }
+          else 
+          {
+            console.log("nooooooooo id nhen");
 
+          }
+        }
+      )
+    })
+  }
+  
+  React.useEffect(() => {
+    async function FetchData () {
+      await createTables();
+      await getNote(id);
+    }
+    
+    const unsubscribe = navigation.addListener('focus', () => {
+      resetState();
+      console.log('Fetching in No..')
+      console.log("id la: ", id);
+      FetchData();
+    });
+    return () => {
+      unsubscribe;
+    }
+  }, [navigation]);
   const getNotes = () => {
     db.transaction(txn => {
       txn.executeSql(
@@ -225,20 +264,7 @@ const NoteScreen = ({ navigation}) => {
 
   );
  
-  // BackHandler.addEventListener('hardwareBackPress', () => {
-    
-  //   if (title == NOTE_TITLE) {
-  //     // console.log(NOTE_TITLE, NOTE_BODY)
-  //     createTables()
-  //     addNote(NOTE_TITLE, NOTE_BODY, '123');
-  //     // getNotes();
-  //   }
-  //   resetState();
-  //   // let isEmpty = Object.keys(note).length === 0;
-  //   // if (isEmpty) {
-  //   //   console.log("nothing is done")
-  //   // }
-  // })
+
   return (
     <Provider>
 
@@ -297,7 +323,7 @@ const NoteScreen = ({ navigation}) => {
         {/* </React.Fragment> */}
         {/* <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => { setshowBotoomSheetAdd(false) }}></BottomSheetAdd> */}
         <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} navigation={navigation} />
-        {/* <Text> {selectedDate ? selectedDate.toLocaleString() : "no date"} </Text> */}
+        <Text> {id} </Text>
         <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
                   selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
                     setIsVisible={setshowSelectDate}

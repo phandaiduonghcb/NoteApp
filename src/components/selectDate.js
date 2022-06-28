@@ -12,13 +12,13 @@ const  SelectDate= (props) => {
 
   // const [date, setDate] = React.useState(new Date());
   // const [selectedDate, setSelectedDate] = useState(props.selectedDate==undefined ? undefined: props.selectedDate);
-  console.log(props.selectedDate==undefined ? undefined: props.selectedDate)
+  // console.log(props.selectedDate==undefined ? undefined: props.selectedDate)
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   // const [selectedTime, setSelectedTime] = useState(props.time);
   // const [timePickerVisible, setTimePickerVisible] = useState(false);
   // console.log(selectedDate == undefined ? "ko hien" : 'hien');
   // console.log(selectedDate)
-  console.log(props.selectedDate == undefined ? "ko hien" : 'hien');
+  // console.log(props.selectedDate == undefined ? "ko hien" : 'hien');
   const [isVisibleDelete,setisVisibleDelete] = useState(props.selectedDate == undefined ? true: false); 
 
   // console.log(isVisibleDelete);

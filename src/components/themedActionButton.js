@@ -8,7 +8,7 @@ const ThemedActionButton = ({navigation}) => {
     const theme = useTheme()
   
     return (
-      <ActionButton buttonColor={theme['color-primary-500']} onPress={() => {navigation.navigate('Note')}}></ActionButton>
+      <ActionButton buttonColor={theme['color-primary-500']} onPress={() => {navigation.navigate('Note',{id: undefined})}}></ActionButton>
     )
   }
 
