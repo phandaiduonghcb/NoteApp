@@ -5,6 +5,7 @@ import HomeScreen from '../views/HomeScreen'
 import TagScreen from '../views/TagScreen'
 import NoteScreen from '../views/NoteScreen';
 import ArchiveScreen from '../views/ArchiveScreen'
+import ChooseTagScreen from '../views/ChooseTagScreen'
 
 import { Drawer, DrawerItem, IndexPath, Icon, DrawerGroup } from '@ui-kitten/components'
 
@@ -113,6 +114,7 @@ function MyDrawer() {
       <Screen name="Tag" component={TagScreen} options={{ headerShown: false }} />
       <Screen name="Note" component={NoteScreen} options={{ headerShown: false }} />
       <Screen name="Archive" component={ArchiveScreen} options={{ headerShown: false }} />
+      <Screen name="ChooseTag" component={ChooseTagScreen} options={{ headerShown:false}} />
     </Navigator>
   );
 }

@@ -296,7 +296,7 @@ const NoteScreen = ({ navigation}) => {
         {/* </BottomNavigation> */}
         {/* </React.Fragment> */}
         {/* <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => { setshowBotoomSheetAdd(false) }}></BottomSheetAdd> */}
-        <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} />
+        <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} navigation={navigation} />
         {/* <Text> {selectedDate ? selectedDate.toLocaleString() : "no date"} </Text> */}
         <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
                   selectedDate={selectedDate} setSelectedDate={setSelectedDate} 

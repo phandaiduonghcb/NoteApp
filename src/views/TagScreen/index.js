@@ -247,7 +247,7 @@ const TagScreen = ({ navigation }) => {
   }
 
   return (
-    <Layout>
+    <Layout style={{height: '100%'}}>
       <KeyboardAvoidingView>
         <FlatList
           removeClippedSubviews={false}
