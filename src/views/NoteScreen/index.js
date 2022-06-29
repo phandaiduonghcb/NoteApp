@@ -88,6 +88,7 @@ let NOTE_ALARM
 let titleY;
 const NoteScreen = ({ navigation,route}) => {
   const {id} = route.params;
+  const [id_item,set_id_item] = React.useState(id);
   const [EditTextState, setEditTextState] = React.useState("Thời gian chỉnh sửa note");
   const [PinState, setPinSate] = React.useState(false); // State có ghim note hay không
   const [ArchiveState, setArchiveState] = React.useState(false); // State có thêm note và archive hay không
@@ -122,21 +123,60 @@ const NoteScreen = ({ navigation,route}) => {
   // const renderMenuAction = () => (
   //   <TopNavigationAction icon={DotsVeticalIcon} onPress={toggleMenu}/>
   // );
+  const updateData = (id) => 
+  {
+    db.transaction(txn => {
+      txn.executeSql(
+        `UPDATE notes set title = ? 
+        where id = ?`,
+        [id],
+        (sqlTxn, res) => {
+          console.log('Results', res.rowsAffected);
+          if (res.rowsAffected > 0)
+          {
+            console.log("update thanh cong");
+
+          }
+          else 
+          {
+            console.log("update failed");
+          }
+        },
+        error => {
+          console.log("error on update data " + error.message);
+        },
+      );
+    });
+  };
   const Back= async () => {
     if (title == NOTE_TITLE  ){
       // console.log(NOTE_TITLE, NOTE_BODY)
-      createTables()
-      addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
-      setTitle('')
-      NOTE_BODY=undefined;
-      NOTE_TITLE=undefined;
-      resetState();
+      if (id == undefined)
+      {
+        console.log("***\n add a item \n*****");
+        createTables()
+        addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
+        setTitle('')
+        NOTE_BODY=undefined;
+        NOTE_TITLE=undefined;
+        resetState();
+        // navigation.goBack();
+          
+      }
+      else
+      {
+        console.log("***\n update a item ",id);
+        console.log("***");
+        updateData(id);
+       
+        resetState();
       // getNotes();
     }
     // navigation.push('Home');
-    navigation.goBack();
-    resetState();
   }
+  navigation.goBack();
+
+}
   // BackHandler.addEventListener("hardwareBackPress",Back);
   React.useEffect(() => {
     const backhandler = BackHandler.addEventListener("hardwareBackPress",Back);
@@ -192,11 +232,17 @@ const NoteScreen = ({ navigation,route}) => {
         'SELECT * FROM notes where id = ?',
         [id],
         (txn,result) => {
+          console.log("co id nhen",id);
           var len = result.rows.length;
           if (len > 0)
           {
-            console.log("co id nhen");
+            console.log("****");
+            console.log("co id nhen",id);
+            console.log(result.rows.item(0).title);
+            console.log("****");
+
             setTitle(result.rows.item(0).title);
+
           }
           else 
           {
@@ -209,46 +255,26 @@ const NoteScreen = ({ navigation,route}) => {
   }
   
   React.useEffect(() => {
-    async function FetchData () {
-      await createTables();
+    async function FetchData (id) {
+      // await createTables();
+      // console.log("co id nhen",id);
       await getNote(id);
     }
-    
-    const unsubscribe = navigation.addListener('focus', () => {
-      resetState();
-      console.log('Fetching in No..')
-      console.log("id la: ", id);
-      FetchData();
-    });
-    return () => {
-      unsubscribe;
-    }
-  }, [navigation]);
-  const getNotes = () => {
-    db.transaction(txn => {
-      txn.executeSql(
-        `SELECT * FROM notes ORDER BY id DESC`,
-        [],
-        (sqlTxn, res) => {
-          console.log("categories retrieved successfully");
-          let len = res.rows.length;
-
-          if (len > 0) {
-            let results = [];
-            for (let i = 0; i < len; i++) {
-              let item = res.rows.item(i);
-              results.push({ id: item.id, title: item.title, body: item.body, alarm: item.alarm });
-            }
-
-            console.log(results)
-          }
-        },
-        error => {
-          console.log("error on getting categories " + error.message);
-        },
-      );
-    });
-  };
+    console.log("id", id);
+    FetchData(id);
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   // resetState();
+    //   console.log("------------")
+    //   console.log('Fetching in NoteScreen..')
+    //   console.log("id la: ", id);
+    //   console.log("------------")
+    //   FetchData();
+    // });
+    // return () => {
+    //   unsubscribe;
+    // }
+  }, [route.params]);
+ 
   const renderRightTopNavigationAction = () =>
   (
     <React.Fragment >
@@ -322,8 +348,8 @@ const NoteScreen = ({ navigation,route}) => {
         {/* </BottomNavigation> */}
         {/* </React.Fragment> */}
         {/* <BottomSheetAdd show={showBotoomSheetAdd} onDismiss={() => { setshowBotoomSheetAdd(false) }}></BottomSheetAdd> */}
-        <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} navigation={navigation} />
-        <Text> {id} </Text>
+        <BottomSettingNote show={showBottomSettingNote} onDismiss={() => setshowBottomSettingNote(false)} navigation={navigation} id={id}/>
+        {/* <Text> {id} </Text> */}
         <SelectDate isVisible={showSelectDate} onBackButtonPress={() => setshowSelectDate(false)} onBackdropPress={() => setshowSelectDate(false)}
                   selectedDate={selectedDate} setSelectedDate={setSelectedDate} 
                     setIsVisible={setshowSelectDate}
