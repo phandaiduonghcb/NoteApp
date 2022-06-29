@@ -18,7 +18,7 @@ const  SelectDate= (props) => {
   // const [timePickerVisible, setTimePickerVisible] = useState(false);
   // console.log(selectedDate == undefined ? "ko hien" : 'hien');
   // console.log(selectedDate)
-  // console.log(props.selectedDate == undefined ? "ko hien" : 'hien');
+  console.log(props.selectedDate == undefined ? "ko hien" : 'hien');
   const [isVisibleDelete,setisVisibleDelete] = useState(props.selectedDate == undefined ? true: false); 
 
   // console.log(isVisibleDelete);
@@ -50,10 +50,11 @@ const  SelectDate= (props) => {
   }
   const handleDelete = () =>
   {
+    
     props.setSelectedDate(undefined);
     // props.setselectedDate();
     // props.setIsVisible(false);
-    props.setSelectedDate(undefined);
+    // props.setSelectedDate(undefined);
     // setisVisibleDelete(!isVisibleDelete);
     setisVisibleDelete(!isVisibleDelete);
     props.setIsVisible(false);
@@ -69,7 +70,7 @@ const  SelectDate= (props) => {
         <Text category='s1' >
         Seleted time: {props.selectedDate ? props.selectedDate.toLocaleString() : 'No date selected'}
         </Text>
-        <Text> {props.selectedDate ? props.selectedDate.toLocaleString() : "no date"} </Text>
+        {/* <Text> {props.selectedDate ? props.selectedDate.toLocaleString() : "no date"} </Text> */}
       <Button style={{ margin: 10}}  onPress={showDatePicker}> Select a date</Button>
       <DateTimePickerModal
           date={props.selectedDate}
