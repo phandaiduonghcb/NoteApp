@@ -163,18 +163,24 @@ const NoteScreen = ({ navigation,route}) => {
       // console.log(NOTE_TITLE, NOTE_BODY)
       if (id == undefined)
       {
-        console.log("***\n add a item \n*****");
-        createTables()
-        addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
-        setTitle('')
-        NOTE_BODY=undefined;
-        NOTE_TITLE=undefined;
-        resetState();
+        console.log(NOTE_TITLE);
+        if (title == NOTE_TITLE )
+        {
+          console.log("***\n add a item \n*****");
+          createTables()
+          addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
+          setTitle('')
+          NOTE_BODY=undefined;
+          NOTE_TITLE=undefined;
+          resetState();
+          
+        }
         // navigation.goBack();
           
       }
       else
       {
+        
         updateData(id,title,selectedDate);
         console.log("***\n update a item ",id);
         console.log("***");

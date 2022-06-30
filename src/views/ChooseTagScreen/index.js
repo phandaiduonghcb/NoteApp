@@ -23,7 +23,8 @@ const ChooseTagScreen = ({ route, navigation }) => {
   const { id } = route.params;
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={() => {
-      navigation.goBack()
+      // navigation.goBack()
+      navigation.navigate('Note',{id: id});
     }} />
   );
   const AddInput = ({ tag }) => {
