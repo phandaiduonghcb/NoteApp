@@ -1,8 +1,9 @@
 import { Button, Icon, Layout, Menu, MenuItem } from "@ui-kitten/components";
 import React  from "react";
-import {Animated, Dimensions, StyleSheet, View} from 'react-native';
+import {Animated, Dimensions, StyleSheet, View, Alert} from 'react-native';
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { Portal } from "react-native-paper";
+import { openDatabase } from "react-native-sqlite-storage";
 const CloseButton = (props) => 
 (
     <Icon {...props}  name='close-outline'/>
@@ -35,13 +36,15 @@ const LabelIcon = (props) =>
     <Icon {...props} name='label' pack='material'/>
 
 );
-
+const db = openDatabase({
+    name: "rn_sqlite",
+  });
 const BottomSettingNote =({show,onDismiss, navigation, id}) => {
     const bottomSheetAddHeight = Dimensions.get('window').height*0.21;
     const deviceWidth = Dimensions.get("window").width;
     const bottom = React.useRef(new Animated.Value(-bottomSheetAddHeight)).current;
     const [open,setOpen] = React.useState(show);
-   
+    const [tags, setTags] = React.useState([])
     const onGesture = (event) => {
       if (event.nativeEvent.translationY > 0) 
       {
@@ -57,7 +60,65 @@ const BottomSettingNote =({show,onDismiss, navigation, id}) => {
         bottom.setValue(0);
       }
     };
+    const getTags = () => {
+        db.transaction(txn => {
+          txn.executeSql(
+            `SELECT * FROM tags ORDER BY tag DESC`,
+            [],
+            (sqlTxn, res) => {
+              console.log("tags retrieved successfully");
+              let len = res.rows.length;
+              console.log('Number of records:', len)
+              if (len == 0) setTags([])
+              if (len > 0) {
+                let results = []
+                for (let i = 0; i < len; i++) {
+                  let item = res.rows.item(i);
+                  results.push(item)
+                }
+                console.log(results)
+                setTags(results)
+              }
+            },
+            error => {
+              console.log("error on getting tags " + error.message);
+            },
+          );
+        });
+      }
+    const DeleteNote = (id) =>
+    {
+        db.transaction(txn => {
+            txn.executeSql(
+              `DELETE FROM notes where id = ?`,
+              [id],
+              (sqlTxn, res) => {
+                console.log("id when delete: ",id);
+                console.log('Results', res.rowsAffected);
+                if (res.rowsAffected > 0)
+                {
+                  console.log("update thanh cong");
+      
+                }
+                else 
+                {
+                  console.log("update failed");
+                }
+              },
+              error => {
+                console.log("error on update data " + error.message);
+              },
+            );
+          });
+    }
+    React.useEffect(() => {
+        async function FetchData() {
+        
+          await getTags();
+        }
     
+        FetchData();
+      }, [navigation]);
     React.useEffect(() => {
         if (show)
         {
@@ -80,6 +141,83 @@ const BottomSettingNote =({show,onDismiss, navigation, id}) => {
             });
         }
     },[show]);
+    const covertidsinTag = (tags,id) =>
+    {
+      var new_tags = []
+        if (tags.length > 0 )
+        {
+          // tags.forEach(element => {
+          //   var ids_new = element.ids.split(',');
+          //   var index = ids_new.indexOf(id);
+          //   if ( index > -1 )
+          //   {
+          //     ids_new.splice(index,1);
+
+          //   }
+          //   ids_new = ids_new.join(',');
+          //   console.log(ids_new);
+          //   return {"ids": ids_new, "tag": element.tag};
+          // });
+          new_tags = tags.map(element => 
+            {
+              var ids_new = element.ids.split(',');
+              var index = ids_new.indexOf(id);
+              if ( index > -1 )
+              {
+                ids_new.splice(index,1);
+
+              }
+              ids_new = ids_new.join(',');
+              // console.log(ids_new);
+              return {"ids": ids_new, "tag": element.tag};
+            });
+        }
+        // console.log(new_tags);
+        return new_tags;
+    }
+    const deleteTag = (tag) => {
+      db.transaction(txn => {
+        txn.executeSql(
+          `DELETE FROM tags WHERE tag=(?)`,
+          [tag],
+          (sqlTxn, res) => {
+            console.log(`${tag} tag deleted successfully`);
+            console.log(tags)
+            getTags();
+          },
+          error => {
+            console.log("error on deleting tag " + error.message);
+          },
+        );
+      });
+    }
+    const addTag = (tag,ids='') => {
+      if (tag == '') {
+        alert("Enter tag");
+        return false;
+      }
+  
+      db.transaction(txn => {
+        txn.executeSql(
+          `INSERT INTO tags (tag,ids) VALUES (?,?)`,
+          [tag, ids],
+          (sqlTxn, res) => {
+            console.log(`${tag} tag added successfully`);
+          },
+          error => {
+            console.log("error on adding tag " + error.message);
+          },
+        );
+      });
+      getTags();
+    };
+    const modifyTag = (new_tags) =>
+    {
+      new_tags.forEach(element => {
+        deleteTag(element.tag);
+        addTag(element.tag,element.ids);
+      });
+    }
     return (
         
         <Portal>
@@ -111,7 +249,35 @@ const BottomSettingNote =({show,onDismiss, navigation, id}) => {
                 <Menu style={{}} size='large'>
                     <MenuItem  title='Delete'  accessoryLeft={DeleteIcon} onPress={() => {
                         console.log("Delete");
-                        onDismiss();
+                        var new_tags = covertidsinTag(tags,id)
+                        // console.log(test);
+                        Alert.alert("Delete","Do you want to delete this note ?",[ 
+                            {
+                                text: "Cancel",
+                                onPress: () => {
+                                    console.log("Cancel Pressed");
+
+                                    onDismiss()},
+                                style: "cancel"
+                              },
+                              { text: "OK", onPress: () => {
+                                    console.log("OK Pressed",id);
+                                    if (id == undefined)
+                                    {
+                                      navigation.goBack();
+                                    }
+                                    else 
+                                    {
+                                      DeleteNote(id);
+                                      modifyTag(new_tags);
+                                      console.log("sau khi xoa",tags);
+                                      navigation.goBack();
+                                    }
+                                    onDismiss();
+                            } }
+                            
+                            ]);
+                        // onDismiss();
                     }}/>
                     <MenuItem title='Make a copy' accessoryLeft={CopyIcon} onPress={() => {
                         console.log("Make a copy");
@@ -119,8 +285,17 @@ const BottomSettingNote =({show,onDismiss, navigation, id}) => {
                     }}/>
                     <MenuItem title='Labels' accessoryLeft={LabelIcon} onPress={() => {
                         console.log("Labels");
-                        navigation.navigate('ChooseTag',{id:id})
-                        onDismiss();
+                        if (id == undefined)
+                        {
+                         
+                          onDismiss();
+                        }
+                        else
+                        {
+                          navigation.navigate('ChooseTag',{id:id})
+                          onDismiss();
+
+                        }
                     }}/>
                 </Menu>
                 

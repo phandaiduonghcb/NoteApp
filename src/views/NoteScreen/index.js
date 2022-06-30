@@ -14,6 +14,7 @@ import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor"
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { openDatabase } from "react-native-sqlite-storage";
 import { back } from 'react-native/Libraries/Animated/Easing';
+import moment from 'moment';
 
 const db = openDatabase({
   name: "rn_sqlite",
@@ -116,7 +117,16 @@ const NoteScreen = ({ navigation,route}) => {
       setshowSelectDate(false);
       setSelectedDate(undefined);
   };
-  
+  const converDateTime = (alarm) =>
+  {
+    moment.locale();
+    return moment(alarm).format("DD/MMM/YYYY HH:MM");
+  }
+  const updateState = (item) => {
+        setTitle(item.title);
+        setSelectedDate(item.alarm == null ? undefined: new Date(item.alarm));
+
+  }
   
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -124,14 +134,14 @@ const NoteScreen = ({ navigation,route}) => {
   // const renderMenuAction = () => (
   //   <TopNavigationAction icon={DotsVeticalIcon} onPress={toggleMenu}/>
   // );
-  const updateData = (id) => 
+  const updateData = (id,title,alarm) => 
   {
     db.transaction(txn => {
       txn.executeSql(
-        `UPDATE notes set title = ? 
-        where id = ?`,
-        [id],
+        `UPDATE notes set title = ? ,alarm = ?  where id = ?`,
+        [title,alarm, id],
         (sqlTxn, res) => {
+          console.log("id when update: ",id);
           console.log('Results', res.rowsAffected);
           if (res.rowsAffected > 0)
           {
@@ -150,29 +160,35 @@ const NoteScreen = ({ navigation,route}) => {
     });
   };
   const Back= async () => {
-    if (title == NOTE_TITLE  ){
+   
       // console.log(NOTE_TITLE, NOTE_BODY)
       if (id == undefined)
       {
-        console.log("***\n add a item \n*****");
-        createTables()
-        addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
-        setTitle('')
-        NOTE_BODY=undefined;
-        NOTE_TITLE=undefined;
-        resetState();
+        console.log(NOTE_TITLE);
+        if (title == NOTE_TITLE )
+        {
+          console.log("***\n add a item \n*****");
+          createTables()
+          addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
+          setTitle('')
+          NOTE_BODY=undefined;
+          NOTE_TITLE=undefined;
+          resetState();
+          
+        }
         // navigation.goBack();
           
       }
       else
       {
+        
+        updateData(id,title,selectedDate);
         console.log("***\n update a item ",id);
         console.log("***");
-        updateData(id);
-       
+      
         resetState();
       // getNotes();
-    }
+    
     // navigation.push('Home');
   }
   navigation.goBack();
@@ -239,18 +255,23 @@ const NoteScreen = ({ navigation,route}) => {
           {
             console.log("****");
             console.log("co id nhen",id);
+            console.log(result.rows.item(0));
             console.log(result.rows.item(0).title);
+            console.log("date: ",converDateTime(result.rows.item(0).alarm));
             console.log("****");
 
-            setTitle(result.rows.item(0).title);
             richText.current?.setContentHTML(result.rows.item(0).body)
+            
+            // setTitle(result.rows.item(0).title);
+            updateState(result.rows.item(0));
 
           }
           else 
           {
-            setTitle('')
             richText.current?.setContentHTML('')
 
+            console.log("nooooooooo id nhen");
+            resetState();
           }
         }
       )

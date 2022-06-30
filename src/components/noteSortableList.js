@@ -76,7 +76,7 @@ const window = Dimensions.get('window');
  }
  
  const NoteSortableList = ({navigation}) => {
-  const [DATA, setDATA] = React.useState({1:''})
+  const [DATA, setDATA] = React.useState({});
   const createTables = () => {
     db.transaction(txn => {
       txn.executeSql(
