@@ -104,6 +104,7 @@ function Row(props) {
             let results = {};
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i);
+              // Loc du lieu o day
               const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
               const textData = search.toUpperCase()
               if (itemData.indexOf(textData) > -1)
