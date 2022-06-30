@@ -75,7 +75,7 @@ function Row(props) {
    );
  }
  
- const NoteSortableList = ({navigation}) => {
+ const NoteSortableList = ({navigation, search }) => {
   const [DATA, setDATA] = React.useState({1:""});
   const createTables = () => {
     db.transaction(txn => {
