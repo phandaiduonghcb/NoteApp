@@ -10,9 +10,15 @@ import ChooseTagScreen from '../views/ChooseTagScreen'
 import { Drawer, DrawerItem, IndexPath, Icon, DrawerGroup } from '@ui-kitten/components'
 
 import {
+  useDrawerStatus,
   createDrawerNavigator,
 } from '@react-navigation/drawer';
 
+import { openDatabase } from "react-native-sqlite-storage";
+
+const db = openDatabase({
+  name: "rn_sqlite",
+});
 
 
 const NoteIcon = (props) => (
@@ -33,7 +39,7 @@ const BellIcon = (props) => (
 );
 
 const ArhiveIcon = (props) => (
-  <Icon {...props} name='archive'/>
+  <Icon {...props} name='archive' />
 )
 
 
@@ -56,46 +62,107 @@ const DrawerContent = ({ navigation, state }) => {
 
   const navigate = (navigation, index) => {
     // console.log(index)
-    if (index.row==0 && index.section==undefined ){
+    if (index.row == 0 && index.section == undefined) {
       navigation.navigate('Home')
     }
-    else if (index.row==1 && index.section==undefined ){
+    else if (index.row == 1 && index.section == undefined) {
       // navigation.navigate('')
     }
-    else if (index.section==undefined && index.row==2)
-    {
+    else if (index.section == undefined && index.row == 2) {
       //Ko lam gi het
       console.log('Group')
     }
-    else if (index.row==0 && index.section==2)
-    {
+    else if (index.row == 0 && index.section == 2) {
       navigation.navigate('Tag')
     }
-    else if (index.row==1 && index.section==2)
-    {
-      
+    else if (index.row == 1 && index.section == 2) {
+
     }
-    else if (index.row==3 && index.section==undefined ){
+    else if (index.row == 3 && index.section == undefined) {
       navigation.navigate('Archive')
     }
-    else if (index.row==4  && index.section==undefined ){
+    else if (index.row == 4 && index.section == undefined) {
       navigation.navigate('Note')
     }
   }
 
+  const createTables = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `CREATE TABLE IF NOT EXISTS tags (tag TEXT PRIMARY KEY, ids TEXT)`,
+        [],
+        (sqlTxn, res) => {
+          console.log("table created successfully");
+        },
+        error => {
+          console.log("error on creating table " + error.message);
+        },
+      );
+    });
+  };
+  const getTags = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `SELECT * FROM tags ORDER BY tag DESC`,
+        [],
+        (sqlTxn, res) => {
+          console.log("tags retrieved successfully");
+          let len = res.rows.length;
+          console.log('Number of records:', len)
+          if (len == 0) setTags([])
+          if (len > 0) {
+            let results = []
+            for (let i = 0; i < len; i++) {
+              let item = res.rows.item(i);
+              results.push(item)
+            }
+            setTags(results)
+          }
+        },
+        error => {
+          console.log("error on getting tags " + error.message);
+        },
+      );
+    });
+  }
+  console.log('Render drawer')
+  const [tags, setTags] = React.useState([])
+
+  const isDrawerOpen = useDrawerStatus() === 'open';
+  React.useEffect(() => {
+    async function FetchData() {
+      await createTables();
+      await getTags();
+    }
+    FetchData()
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   console.log('Fetching..')
+    //   FetchData();
+    // });
+    // return () => {
+    //   unsubscribe;
+    // }
+  }, [isDrawerOpen]);
+  const renderTags = () => {
+    return tags.map((item) => {
+      return (
+        <DrawerItem accessoryLeft={LabelIcon} title={item.tag} />
+      );
+    });
+  }
   return (
     <Drawer
       header={Header}
       footer={Footer}
       selectedIndex={new IndexPath(state.index)}
-      onSelect={index => {navigate(navigation, index)}}>
-      <DrawerItem accessoryLeft={NoteIcon} title='Home'/>
-      <DrawerItem accessoryLeft={BellIcon} title='Alarm'/>
+      onSelect={index => { navigate(navigation, index) }}>
+      <DrawerItem accessoryLeft={NoteIcon} title='Home' />
+      <DrawerItem accessoryLeft={BellIcon} title='Alarm' />
       <DrawerGroup accessoryLeft={TagIcon} title='Tag Group'>
         <DrawerItem accessoryLeft={TagIcon} title='Add Tag' />
-        <DrawerItem accessoryLeft={LabelIcon} title='Tag' />
+        {renderTags()}
       </DrawerGroup>
-      <DrawerItem accessoryLeft={ArhiveIcon} title='Archive'/>
+      <DrawerItem accessoryLeft={ArhiveIcon} title='Archive' />
     </Drawer>
   )
 }
@@ -112,7 +179,7 @@ function MyDrawer() {
       <Screen name="Tag" component={TagScreen} options={{ headerShown: false }} />
       <Screen name="Note" component={NoteScreen} options={{ headerShown: false }} />
       <Screen name="Archive" component={ArchiveScreen} options={{ headerShown: false }} />
-      <Screen name="ChooseTag" component={ChooseTagScreen} options={{ headerShown:false}} />
+      <Screen name="ChooseTag" component={ChooseTagScreen} options={{ headerShown: false }} />
     </Navigator>
   );
 }

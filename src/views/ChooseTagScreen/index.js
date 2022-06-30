@@ -212,7 +212,6 @@ const ChooseTagScreen = ({ route, navigation }) => {
       await createTables();
       await getTags();
     }
-    FetchData()
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Fetching..')
       FetchData();
