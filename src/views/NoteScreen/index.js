@@ -171,8 +171,8 @@ const NoteScreen = ({ navigation,route}) => {
           // createTables()
           addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
           setTitle('')
-          NOTE_BODY=undefined;
-          NOTE_TITLE=undefined;
+          NOTE_BODY='';
+          NOTE_TITLE='';
           resetState();
           
         }
@@ -181,6 +181,7 @@ const NoteScreen = ({ navigation,route}) => {
       }
       else
       {
+        console.log('tt',title,NOTE_TITLE)
         if (title==NOTE_TITLE)
         {
           updateData(id,title,selectedDate,NOTE_BODY);
@@ -265,6 +266,7 @@ const NoteScreen = ({ navigation,route}) => {
 
             richText.current?.setContentHTML(result.rows.item(0).body)
             NOTE_BODY = result.rows.item(0).body
+            NOTE_TITLE = result.rows.item(0).title
             
             // setTitle(result.rows.item(0).title);
             updateState(result.rows.item(0));
@@ -274,6 +276,7 @@ const NoteScreen = ({ navigation,route}) => {
           {
             richText.current?.setContentHTML('')
             NOTE_BODY=''
+            NOTE_TITLE = ''
             console.log("nooooooooo id nhen");
             resetState();
           }
@@ -501,6 +504,7 @@ const RichTextEditor = (props) => {
             ref={props.richText}
             onChange={descriptionText => {
               NOTE_BODY = descriptionText
+              console.log(NOTE_BODY)
               // console.log("descriptionText:", descriptionText);
               // if (descriptionText != ''){
               //     HTML = descriptionText;
