@@ -13,17 +13,18 @@ const LeftButton = (navigation) => (
 const MenuOutline = (props) => (
     <Icon {...props} name='menu-outline'/>
   );
-const SearchBar = ({ navigation}) => 
+
+const SearchBar = ({ setSearch,search, navigation}) => 
     {
-        const [value, setValue] = React.useState('');
+        // const [value, setValue] = React.useState('');
 
         return (
             <View style={styles.container}>
             <Input
                 placeholder='Place your Text'
                 accessoryLeft={LeftButton(navigation)}
-                value={value}
-                onChangeText={nextValue => setValue(nextValue)}
+                value={search}
+                onChangeText={nextValue => setSearch(nextValue)}
             />
             </View>
             );

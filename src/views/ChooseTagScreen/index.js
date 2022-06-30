@@ -101,6 +101,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={() => {
       navigation.goBack()
+      setSearch('')
     }} />
   );
   const renderItem = ({ item }) => (
@@ -219,7 +220,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
     return () => {
       unsubscribe;
     }
-  }, []);
+  }, [navigation]);
   const searchFilter = (text) => {
     if (text) {
       const newData = masterData.filter((item) => {
@@ -263,7 +264,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    height: '100%',
   },
   item: {
     backgroundColor: '#f9c2ff',

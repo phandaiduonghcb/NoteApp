@@ -14,30 +14,14 @@ import { useIsFocused } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
   let isFocused = useIsFocused();
-  console.log('Focused:',isFocused);
+  const [search, setSearch] = React.useState('')
+  console.log(search)
   return (
-    // <Layout>
-    //   {/* <View style={styles.container}> */}
-    //     <SearchBar navigation={navigation} />
-    //     {/* <Layout style={styles.layoutContainer} level='4'>
-    //       <NoteCard style={styles.card} content='akjsndakljnsdkjnasd'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjasdasdddddddddddddsn'></NoteCard>
-    //       <NoteCard style={styles.card} content='andjk'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjsndakljnsdkjnasd'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjasdasdddddddddddddsn'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjsndakljnsdkjnasd'></NoteCard>
-    //       <NoteCard style={styles.card} content='akjasdasdddddddddddddsn'></NoteCard>
-    //       <NoteCard style={styles.card} content='andjk'></NoteCard>
-    //       <NoteCard style={styles.card} content='andjk'></NoteCard>
-    //       <NoteCard style={styles.card} content='duong'></NoteCard>
-    //     </Layout> */}
-    //   {/* </View> */}
-    // </Layout>
     <>
     <Layout>
-      <SearchBar navigation={navigation} />
+      <SearchBar setSearch={setSearch} search={search} navigation={navigation} />
     </Layout>
-      <NoteSortableList navigation={navigation}/>
+      <NoteSortableList search={search} navigation={navigation}/>
       <BottomBar></BottomBar>
       <ThemedActionButton navigation={navigation} />
     </>

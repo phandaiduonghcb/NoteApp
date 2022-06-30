@@ -272,7 +272,7 @@ const NoteScreen = ({ navigation,route}) => {
           else 
           {
             richText.current?.setContentHTML('')
-
+            NOTE_BODY=''
             console.log("nooooooooo id nhen");
             resetState();
           }
