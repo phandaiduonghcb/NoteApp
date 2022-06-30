@@ -181,7 +181,9 @@ const NoteScreen = ({ navigation,route}) => {
       }
       else
       {
-        
+        if (NOTE_BODY==''){
+
+        }
         updateData(id,title,selectedDate,NOTE_BODY);
         console.log("***\n update a item ",id);
         console.log("***");
@@ -261,6 +263,7 @@ const NoteScreen = ({ navigation,route}) => {
             console.log("****");
 
             richText.current?.setContentHTML(result.rows.item(0).body)
+            NOTE_BODY = result.rows.item(0).body
             
             // setTitle(result.rows.item(0).title);
             updateState(result.rows.item(0));
