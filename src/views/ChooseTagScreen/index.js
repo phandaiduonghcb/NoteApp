@@ -220,12 +220,8 @@ const ChooseTagScreen = ({ route, navigation }) => {
     return () => {
       unsubscribe;
     }
-<<<<<<< HEAD
-  }, []);
-=======
   }, [navigation]);
   console.log(filteredData)
->>>>>>> 2cc2646d107b3ff59baedbb809454bb3c7f7686f
   const searchFilter = (text) => {
     if (text) {
       const newData = masterData.filter((item) => {
