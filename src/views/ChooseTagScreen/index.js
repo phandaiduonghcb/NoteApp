@@ -60,9 +60,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
           console.log("tags retrieved successfully");
           let len = res.rows.length;
           console.log('Number of records:', len)
-          if (len == 0) {
-            setFilteredData([])}
-
+          if (len == 0) setFilteredData([])
           if (len > 0) {
             let results = []
             for (let i = 0; i < len; i++) {
@@ -222,7 +220,12 @@ const ChooseTagScreen = ({ route, navigation }) => {
     return () => {
       unsubscribe;
     }
+<<<<<<< HEAD
   }, []);
+=======
+  }, [navigation]);
+  console.log(filteredData)
+>>>>>>> 2cc2646d107b3ff59baedbb809454bb3c7f7686f
   const searchFilter = (text) => {
     if (text) {
       const newData = masterData.filter((item) => {
@@ -247,6 +250,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
           title='Modify tags'
           placeholder='Add a tag here!'
         />
+
         <Input
           accessoryLeft={renderLeftAddButton}
           accessoryRight={renderRightAddButton}
