@@ -13,7 +13,7 @@ import SelectDate from '../../components/selectDate';
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { openDatabase } from "react-native-sqlite-storage";
-import { back } from 'react-native/Libraries/Animated/Easing';
+
 import moment from 'moment';
 
 const db = openDatabase({
@@ -168,7 +168,7 @@ const NoteScreen = ({ navigation,route}) => {
         if (title == NOTE_TITLE )
         {
           console.log("***\n add a item \n*****");
-          createTables()
+          // createTables()
           addNote(NOTE_TITLE, NOTE_BODY, selectedDate);
           setTitle('')
           NOTE_BODY=undefined;

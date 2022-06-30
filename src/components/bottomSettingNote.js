@@ -119,6 +119,7 @@ const BottomSettingNote =({show,onDismiss, navigation, id}) => {
     
         FetchData();
       }, [navigation]);
+      
     React.useEffect(() => {
         if (show)
         {
@@ -271,7 +272,7 @@ const BottomSettingNote =({show,onDismiss, navigation, id}) => {
                                       DeleteNote(id);
                                       modifyTag(new_tags);
                                       console.log("sau khi xoa",tags);
-                                      navigation.goBack();
+                                      navigation.navigate("Home");
                                     }
                                     onDismiss();
                             } }
