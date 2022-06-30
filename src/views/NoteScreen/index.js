@@ -105,6 +105,7 @@ const NoteScreen = ({ navigation,route}) => {
   // const [selectedTime, setSelectedTime] = React.useState();
   // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
   const [title, setTitle] = React.useState('');
+  const richText = React.useRef();
   
   const resetState = () => {
       setPinSate(false);
@@ -242,11 +243,13 @@ const NoteScreen = ({ navigation,route}) => {
             console.log("****");
 
             setTitle(result.rows.item(0).title);
+            richText.current?.setContentHTML(result.rows.item(0).body)
 
           }
           else 
           {
-            console.log("nooooooooo id nhen");
+            setTitle('')
+            richText.current?.setContentHTML('')
 
           }
         }
@@ -330,7 +333,7 @@ const NoteScreen = ({ navigation,route}) => {
             }}
           />
           {/* chỗ nhập nội dung note   */}
-          <RichTextEditor height={windowHeight * 75 / 100} />
+          <RichTextEditor height={windowHeight * 75 / 100} richText={richText}/>
         </ScrollView>
 
         {/* <BottomNavigation style={{ height:10,flex: 1, flexDirection: 'row',}} {...topState}> */}
@@ -407,7 +410,7 @@ const RichTextEditor = (props) => {
           result = response.assets[0].base64
           // console.log(result)
           html = '<img src="data:image/png;base64,' + result + '" />'
-          richText.current?.insertHTML(html)
+          props.richText.current?.insertHTML(html)
           // a = count+1
           // setCount(a)
         }
@@ -419,7 +422,7 @@ const RichTextEditor = (props) => {
           result = response.assets[0].base64
           // console.log(result)
           html = '<img src="data:image/png;base64,' + result + '" />'
-          richText.current?.insertHTML(html)
+          props.richText.current?.insertHTML(html)
           // a = count+1
           // setCount(a)
         }
@@ -454,7 +457,7 @@ const RichTextEditor = (props) => {
 
   const [keyboardStatus, setKeyboardStatus] = React.useState(undefined);
   const [eHeight, setEHeight] = React.useState(props.height);
-  const richText = React.useRef();
+  // const richText = React.useRef();
   const scrollRef = React.useRef()
   const [visible, setVisible] = React.useState(false);
 
@@ -470,7 +473,7 @@ const RichTextEditor = (props) => {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
           <RichEditor
 
-            ref={richText}
+            ref={props.richText}
             onChange={descriptionText => {
               NOTE_BODY = descriptionText
               // console.log("descriptionText:", descriptionText);
@@ -487,7 +490,7 @@ const RichTextEditor = (props) => {
       </ScrollView>
 
       <RichToolbar
-        editor={richText}
+        editor={props.richText}
         iconTint={theme['color-primary-500']}
         selectedIconTint={theme['color-danger-500']}
         actions={[actions.setBold, actions.setItalic, actions.setUnderline, actions.insertImage, 'exitKeyboard']}
@@ -498,7 +501,7 @@ const RichTextEditor = (props) => {
           // richText.current?.commandDOM(`document.execCommand('insertHTML', false, "<br/>diaskdja")`);
         }}
         iconMap={{ exitKeyboard: (tintColor) => (<Text style={[{ color: theme['color-primary-500'] }]}>X</Text>), }}
-        exitKeyboard={() => richText.current?.dismissKeyboard()}
+        exitKeyboard={() => props.richText.current?.dismissKeyboard()}
       />
       {/* <Text>{keyboardStatus}</Text> */}
       {/* <View style={styles.container}> */}

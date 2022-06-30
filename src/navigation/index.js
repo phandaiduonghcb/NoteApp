@@ -38,16 +38,16 @@ const ArhiveIcon = (props) => (
 
 
 const Header = (props) => (
-  <Layout style={{ paddingVertical: '10%' }}>
-    <Text category='h1'>This is header</Text>
+  <Layout style={{ paddingVertical: '10%', alignItems: 'center', justifyContent: 'center' }}>
+    <Text category='h1'>My Note</Text>
     <Divider />
   </Layout>
 );
 
 const Footer = (props) => (
   <Layout style={{ paddingVertical: '10%' }}>
-    <Text category='h1'>This is Footer</Text>
-    <Divider />
+    {/* <Text category='h1'>This is Footer</Text>
+    <Divider /> */}
   </Layout>
 );
 
@@ -96,8 +96,6 @@ const DrawerContent = ({ navigation, state }) => {
         <DrawerItem accessoryLeft={LabelIcon} title='Tag' />
       </DrawerGroup>
       <DrawerItem accessoryLeft={ArhiveIcon} title='Archive'/>
-
-      <DrawerItem title='Note' />
     </Drawer>
   )
 }
