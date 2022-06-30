@@ -60,7 +60,7 @@ const Footer = (props) => (
 
 const DrawerContent = ({ navigation, state }) => {
 
-  const navigate = (navigation, index) => {
+  const nav = (navigation, index) => {
     // console.log(index)
     if (index.row == 0 && index.section == undefined) {
       navigation.navigate('Home')
@@ -81,9 +81,7 @@ const DrawerContent = ({ navigation, state }) => {
     else if (index.row == 3 && index.section == undefined) {
       navigation.navigate('Archive')
     }
-    else if (index.row == 4 && index.section == undefined) {
-      navigation.navigate('Note')
-    }
+    
   }
 
   const createTables = () => {
@@ -116,6 +114,7 @@ const DrawerContent = ({ navigation, state }) => {
               let item = res.rows.item(i);
               results.push(item)
             }
+            console.log("add tag,:",results);
             setTags(results)
           }
         },
@@ -134,7 +133,9 @@ const DrawerContent = ({ navigation, state }) => {
       await createTables();
       await getTags();
     }
-    FetchData()
+    // FetchData();
+    // setrenderTags_new(renderTags());
+    // console.log("render moiw nhen: ",renderTags());
     // const unsubscribe = navigation.addListener('focus', () => {
     //   console.log('Fetching..')
     //   FetchData();
@@ -142,20 +143,23 @@ const DrawerContent = ({ navigation, state }) => {
     // return () => {
     //   unsubscribe;
     // }
-  }, [isDrawerOpen]);
+  }, [nav]);
   const renderTags = () => {
+    console.log("noi dung tag",tags);
     return tags.map((item) => {
       return (
         <DrawerItem accessoryLeft={LabelIcon} title={item.tag} />
       );
     });
   }
+  const [renderTags_new,setrenderTags_new] = React.useState([]);
+
   return (
     <Drawer
       header={Header}
       footer={Footer}
       selectedIndex={new IndexPath(state.index)}
-      onSelect={index => { navigate(navigation, index) }}>
+      onSelect={index => { nav(navigation, index) }}>
       <DrawerItem accessoryLeft={NoteIcon} title='Home' />
       <DrawerItem accessoryLeft={BellIcon} title='Alarm' />
       <DrawerGroup accessoryLeft={TagIcon} title='Tag Group'>
