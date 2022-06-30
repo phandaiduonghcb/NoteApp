@@ -110,6 +110,10 @@ const window = Dimensions.get('window');
             setDATA(results)
             console.log("Data: ",DATA);
           }
+          else 
+          {
+            setDATA({});
+          }
         },
         error => {
           console.log("error on getting categories " + error.message);
@@ -122,16 +126,16 @@ const window = Dimensions.get('window');
       await createTables();
       await getNotes();
     }
-    // FetchData();
-    const unsubscribe = navigation.addListener('focus', () => {
-      console.log('Fetching..')
+    FetchData();
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   console.log('Fetching..')
 
-      FetchData();
-      // console.log("DATA",DATA);
-    });
-    return () => {
-      unsubscribe;
-    }
+    //   FetchData();
+    //   // console.log("DATA",DATA);
+    // });
+    // return () => {
+    //   unsubscribe;
+    // }
   }, [navigation]);
 
   // if (isFocused){
