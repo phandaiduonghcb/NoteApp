@@ -181,19 +181,20 @@ const NoteScreen = ({ navigation,route}) => {
       }
       else
       {
-        if (NOTE_BODY==''){
-
+        if (title==NOTE_TITLE)
+        {
+          updateData(id,title,selectedDate,NOTE_BODY);
+          console.log("***\n update a item ",id);
+          console.log("***");
+        
+          resetState();
+   
         }
-        updateData(id,title,selectedDate,NOTE_BODY);
-        console.log("***\n update a item ",id);
-        console.log("***");
-      
-        resetState();
-      // getNotes();
+             // getNotes();
     
     // navigation.push('Home');
   }
-  navigation.goBack();
+  navigation.navigate('Home');
 
 }
   // BackHandler.addEventListener("hardwareBackPress",Back);

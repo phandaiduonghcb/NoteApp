@@ -60,7 +60,9 @@ const ChooseTagScreen = ({ route, navigation }) => {
           console.log("tags retrieved successfully");
           let len = res.rows.length;
           console.log('Number of records:', len)
-          if (len == 0) setTags([])
+          if (len == 0) {
+            setFilteredData([])}
+
           if (len > 0) {
             let results = []
             for (let i = 0; i < len; i++) {
@@ -101,7 +103,6 @@ const ChooseTagScreen = ({ route, navigation }) => {
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={() => {
       navigation.goBack()
-      setSearch('')
     }} />
   );
   const renderItem = ({ item }) => (
@@ -213,6 +214,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
       await createTables();
       await getTags();
     }
+    FetchData()
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Fetching..')
       FetchData();
@@ -220,7 +222,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
     return () => {
       unsubscribe;
     }
-  }, [navigation]);
+  }, []);
   const searchFilter = (text) => {
     if (text) {
       const newData = masterData.filter((item) => {
@@ -264,7 +266,7 @@ const ChooseTagScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: '100%',
+    marginTop: StatusBar.currentHeight || 0,
   },
   item: {
     backgroundColor: '#f9c2ff',
