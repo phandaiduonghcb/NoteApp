@@ -72,11 +72,11 @@ function Row(props) {
 
   return (
     <NoteCard style={[styles.row, style]} data={data}></NoteCard>
-  );
-}
-
-const NoteSortableList = ({ navigation, search }) => {
-  const [DATA, setDATA] = React.useState({});
+   );
+ }
+ 
+ const NoteSortableList = ({navigation, search }) => {
+  const [DATA, setDATA] = React.useState({1:""});
   const createTables = () => {
     db.transaction(txn => {
       txn.executeSql(
@@ -123,6 +123,7 @@ const NoteSortableList = ({ navigation, search }) => {
       );
     });
   }
+ 
   React.useEffect(() => {
     console.log(search)
     async function FetchData (search) {

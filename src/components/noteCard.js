@@ -9,10 +9,10 @@ const NoteCard = (props) => {
     return (
     <Animated.View style={props.style} >
        <View style={{height:'20%'}}><Text style={{}}>{props.data.title}</Text ></View>
-       {/* <View style={{height:'80%'}}><Text  style={{}}>{props.data.alarm}</Text></View> */}
-       <WebView
+       <View style={{height:'20%'}}><Text  style={{}}>{props.data.alarm}</Text></View>
+       {/* <WebView
        style={{backgroundColor:theme['background-basic-color'], color: theme['text-basic-color']}}
-       originWhitelist={['*']} source={{html: content}} />
+       originWhitelist={['*']} source={{html: content}} /> */}
     </Animated.View>
     )
 }
