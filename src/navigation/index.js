@@ -61,27 +61,61 @@ const Footer = (props) => (
 const DrawerContent = ({ navigation, state }) => {
 
   const nav = (navigation, index) => {
-    // console.log(index)
-    if (index.row == 0 && index.section == undefined) {
-      navigation.navigate('Home')
-    }
-    else if (index.row == 1 && index.section == undefined) {
-      // navigation.navigate('')
-    }
-    else if (index.section == undefined && index.row == 2) {
-      //Ko lam gi het
-      console.log('Group')
-    }
-    else if (index.row == 0 && index.section == 2) {
-      navigation.navigate('Tag')
-    }
-    else if (index.row == 1 && index.section == 2) {
+    console.log(tags.length)
+    // if (index.row == 0 && index.section == undefined) {
+    //   navigation.navigate('Home')
+    // }
+    // else if (index.row == 1 && index.section == undefined) {
+    //   // navigation.navigate('')
+    //   console.log("chon alarm");
+    // }
+    // else if (index.section == undefined && index.row == 2) {
+    //   //Ko lam gi het
+    //   console.log('Group')
+    // }
+    // else if (index.row == 3 && index.section == undefined) {
+    //   navigation.navigate('Tag')
+    // }
+    // else if (index.row == 1 && index.section == 2) {
 
+    // }
+    // else if (index.row == 3 && index.section == undefined) {
+    //   // navigation.navigate('Archive')
+    // }
+    if (index.section == undefined) 
+    {
+        if (index.row == 0 ) 
+        {
+          console.log("Select HomeScreen");
+          navigation.navigate('Home');
+        }
+        else if (index.row == 1) 
+        {
+          console.log("Select Alarm");
+          // navigation.navigate('Home');
+        }
+        else if (index.row == 2)
+        {
+          console.log("Select Archive");
+        }
+        else if (index.row == 3)
+        {
+          console.log("Select Tag Group");
+          
+        }
+       else if (index.row ==  4)
+       {
+          console.log("Select Add Group");
+          navigation.navigate('Tag');
+          
+          
+       }
+       else 
+       {
+          console.log(tags[index.row - 5 ]);
+          
+       }
     }
-    else if (index.row == 3 && index.section == undefined) {
-      navigation.navigate('Archive')
-    }
-    
   }
 
   const createTables = () => {
@@ -128,12 +162,19 @@ const DrawerContent = ({ navigation, state }) => {
   const [tags, setTags] = React.useState([])
 
   const isDrawerOpen = useDrawerStatus() === 'open';
+  
   React.useEffect(() => {
     async function FetchData() {
       await createTables();
       await getTags();
     }
-    // FetchData();
+    if (isDrawerOpen==true)
+    {
+      console.log("fetch data tags: ", tags);
+      FetchData();
+    }
+   
+    // const ad = addEventListener()
     // setrenderTags_new(renderTags());
     // console.log("render moiw nhen: ",renderTags());
     // const unsubscribe = navigation.addListener('focus', () => {
@@ -143,7 +184,7 @@ const DrawerContent = ({ navigation, state }) => {
     // return () => {
     //   unsubscribe;
     // }
-  }, [nav]);
+  }, [isDrawerOpen]);
   const renderTags = () => {
     console.log("noi dung tag",tags);
     return tags.map((item) => {
@@ -152,7 +193,7 @@ const DrawerContent = ({ navigation, state }) => {
       );
     });
   }
-  const [renderTags_new,setrenderTags_new] = React.useState([]);
+ 
 
   return (
     <Drawer
@@ -162,11 +203,20 @@ const DrawerContent = ({ navigation, state }) => {
       onSelect={index => { nav(navigation, index) }}>
       <DrawerItem accessoryLeft={NoteIcon} title='Home' />
       <DrawerItem accessoryLeft={BellIcon} title='Alarm' />
-      <DrawerGroup accessoryLeft={TagIcon} title='Tag Group'>
-        <DrawerItem accessoryLeft={TagIcon} title='Add Tag' />
-        {renderTags()}
-      </DrawerGroup>
+      {/* <Divider></Divider> */}
+      {/* <DrawerItem accessoryLeft={TagIcon} title='Tag Group'/> */}
       <DrawerItem accessoryLeft={ArhiveIcon} title='Archive' />
+      <DrawerItem accessoryLeft={TagIcon} title='Tag Group'/>
+      <DrawerItem accessoryLeft={TagIcon} title='Add Tag'></DrawerItem>
+     
+     
+      {tags.map((item) => {
+          console.log("render item",item.tag);
+          return (
+          <DrawerItem accessoryLeft={LabelIcon} title={item.tag} />
+      );})}
+      {/* <Divider></Divider> */}
+      
     </Drawer>
   )
 }

@@ -229,7 +229,6 @@ const NoteScreen = ({ navigation,route}) => {
 
   const addNote = (title, body, alarm) => {
     if (title == '' && body == '') {
-      alert("Enter note");
       return false;
     }
 
