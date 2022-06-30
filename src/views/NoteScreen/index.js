@@ -134,12 +134,12 @@ const NoteScreen = ({ navigation,route}) => {
   // const renderMenuAction = () => (
   //   <TopNavigationAction icon={DotsVeticalIcon} onPress={toggleMenu}/>
   // );
-  const updateData = (id,title,alarm) => 
+  const updateData = (id,title,alarm,body) => 
   {
     db.transaction(txn => {
       txn.executeSql(
-        `UPDATE notes set title = ? ,alarm = ?  where id = ?`,
-        [title,alarm, id],
+        `UPDATE notes set title = ? ,alarm = ?,body = ? where id = ?`,
+        [title,alarm, body, id],
         (sqlTxn, res) => {
           console.log("id when update: ",id);
           console.log('Results', res.rowsAffected);
@@ -182,7 +182,7 @@ const NoteScreen = ({ navigation,route}) => {
       else
       {
         
-        updateData(id,title,selectedDate);
+        updateData(id,title,selectedDate,NOTE_BODY);
         console.log("***\n update a item ",id);
         console.log("***");
       

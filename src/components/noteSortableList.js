@@ -188,7 +188,7 @@ const window = Dimensions.get('window');
     //  alignItems: 'center',
     //  backgroundColor: 'gray',
      padding: 16,
-     height: window.height/5,
+     height: window.height/4,
      flex: 1,
      marginTop: '1%',
      marginBottom: '1%',
