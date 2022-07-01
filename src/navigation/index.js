@@ -15,6 +15,8 @@ import {
 } from '@react-navigation/drawer';
 
 import { openDatabase } from "react-native-sqlite-storage";
+import AlarmScreen from '../views/AlarmScreen';
+import CustomTagScreen from '../views/CustomTagScreen';
 
 const db = openDatabase({
   name: "rn_sqlite",
@@ -62,26 +64,7 @@ const DrawerContent = ({ navigation, state }) => {
 
   const nav = (navigation, index) => {
     console.log(tags.length)
-    // if (index.row == 0 && index.section == undefined) {
-    //   navigation.navigate('Home')
-    // }
-    // else if (index.row == 1 && index.section == undefined) {
-    //   // navigation.navigate('')
-    //   console.log("chon alarm");
-    // }
-    // else if (index.section == undefined && index.row == 2) {
-    //   //Ko lam gi het
-    //   console.log('Group')
-    // }
-    // else if (index.row == 3 && index.section == undefined) {
-    //   navigation.navigate('Tag')
-    // }
-    // else if (index.row == 1 && index.section == 2) {
-
-    // }
-    // else if (index.row == 3 && index.section == undefined) {
-    //   // navigation.navigate('Archive')
-    // }
+   
     if (index.section == undefined) 
     {
         if (index.row == 0 ) 
@@ -92,7 +75,7 @@ const DrawerContent = ({ navigation, state }) => {
         else if (index.row == 1) 
         {
           console.log("Select Alarm");
-          // navigation.navigate('Home');
+          navigation.navigate('Alarm');
         }
         else if (index.row == 2)
         {
@@ -113,7 +96,8 @@ const DrawerContent = ({ navigation, state }) => {
        else 
        {
           console.log(tags[index.row - 5 ]);
-          
+          navigation.navigate('CustomTag',tags[index.row-5 ]);
+
        }
     }
   }
@@ -234,6 +218,8 @@ function MyDrawer() {
       <Screen name="Note" component={NoteScreen} options={{ headerShown: false }} />
       <Screen name="Archive" component={ArchiveScreen} options={{ headerShown: false }} />
       <Screen name="ChooseTag" component={ChooseTagScreen} options={{ headerShown: false }} />
+      <Screen name="Alarm" component={AlarmScreen} options={{ headerShown: false }} />
+      <Screen name="CustomTag" component={CustomTagScreen} options={{ headerShown: false }} />
     </Navigator>
   );
 }

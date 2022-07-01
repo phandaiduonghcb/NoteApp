@@ -75,7 +75,9 @@ function Row(props) {
    );
  }
  
- const NoteSortableList = ({navigation, search }) => {
+ const NoteSortableList = ({navigation, search ,checkAlarm=false,ids,tag}) => {
+  // console.log("tag laf gif ", tag);
+  // console.log("ids: ",ids);
   const [DATA, setDATA] = React.useState({1:""});
   const createTables = () => {
     db.transaction(txn => {
@@ -83,69 +85,223 @@ function Row(props) {
         `CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT, alarm TEXT)`,
         [],
         (sqlTxn, res) => {
-          console.log("table created successfully");
+          // console.log("table created successfully");
         },
         error => {
-          console.log("error on creating table " + error.message);
+          // console.log("error on creating table " + error.message);
         },
       );
     });
   };
-  const getNotes = (search) => {
+  const getNote = (id) => {
+    var data = {};
     db.transaction(txn => {
       txn.executeSql(
-        `SELECT * FROM notes ORDER BY id DESC`,
-        [],
-        (sqlTxn, res) => {
-          console.log("notes retrieved successfully");
-          let len = res.rows.length;
-          console.log('Number of records:', len)
-          if (len > 0) {
-            let results = {};
-            for (let i = 0; i < len; i++) {
-              let item = res.rows.item(i);
-              // Loc du lieu o day
-              const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
-              const textData = search.toUpperCase()
-              if (itemData.indexOf(textData) > -1)
-                results[item.id] = { title: item.title, body: item.body, alarm: item.alarm };
+        'SELECT * FROM notes where id = ?',
+        [id],
+        (txn,result) => {
+          console.log("co id nhen",id);
+          var len = result.rows.length;
+          if (len > 0)
+          {
+              data = { title: item.title, body: item.body, alarm: item.alarm ,tag : tag};
+              // console.log("data moi",data);
+          }
+         
+        }
+      )
+    })
+  
+    return data;
+  };
+  const getNotes = (search) => {
+    if (checkAlarm==false)
+    {
+    
+        db.transaction(txn => {
+          txn.executeSql(
+            `SELECT * FROM notes ORDER BY id DESC`,
+            [],
+            (sqlTxn, res) => {
+              console.log("notes retrieved successfully");
+              let len = res.rows.length;
+              var checkIds = undefined
+              if (ids != undefined)
+              {
+                
+                checkIds = ids.split(",");
+               
+              }
+              
+              console.log(checkIds);
+              console.log('Number of records:', len)
+              if (len > 0) {
+                let results = {};
+                for (let i = 0; i < len; i++) {
+                  let item = res.rows.item(i);
+                  // Loc du lieu o day
+                  if (tag == undefined)
+                  {
+                  const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+                  const textData = search.toUpperCase()
+                    if (itemData.indexOf(textData) > -1)
+                    {
+                      
+                        results[item.id] = { title: item.title, body: item.body, alarm: item.alarm };
+
+                    }
+                  }
+                  else 
+                  {
+                    // console.log("khong vo duoc");
+                    const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+                    const textData = search.toUpperCase()
+                    // console.log("khong vo duoc");
+                    if (itemData.indexOf(textData) > -1 )
+                    {
+                      if (checkIds.indexOf(String(item.id)) > -1)
+                      {
+                        console.log("chon");
+                        results[item.id] = { title: item.title, body: item.body, alarm: item.alarm ,tag : tag};
+
+                      }
+                   
+                    }
+
+                  }
+                  // else 
+                  // {
+               
+                  // }
+                }
+                if (ids=="")
+                {
+                  setDATA({});
+                }
+                else 
+                {
+                 
+                  setDATA(results);
+                }
+               
+                }
+               
+              
+              else {
+                setDATA({});
+                // console.log("Data, ", DATA);
+              }
+            },
+            error => {
+              // console.log("error on getting categories " + error.message);
+            },
+          );
+        });
+   
+    
+    }
+    else 
+    {
+      db.transaction(txn => {
+        txn.executeSql(
+          `SELECT * FROM notes where alarm is not null`,
+          [],
+          (sqlTxn, res) => {
+            // console.log("notes retrieved successfully");
+            let len = res.rows.length;
+            // console.log('Number of records in Alarm:', len)
+            if (len > 0) {
+              let results = {};
+              for (let i = 0; i < len; i++) {
+                let item = res.rows.item(i);
+                // Loc du lieu o day
+                const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+                const textData = search.toUpperCase()
+                if (itemData.indexOf(textData) > -1)
+                  results[item.id] = { title: item.title, body: item.body, alarm: item.alarm };
+              }
+              setDATA(results)
+              // console.log("Data in Alarm: ", DATA);
             }
-            setDATA(results)
-            console.log("Data: ", DATA);
-          }
-          else {
-            setDATA({});
-            console.log("Data, ", DATA);
-          }
-        },
-        error => {
-          console.log("error on getting categories " + error.message);
-        },
-      );
-    });
+            else {
+              setDATA({});
+              // console.log("Data in Alarm, ", DATA);
+            }
+          },
+          error => {
+            // console.log("error on getting categories " + error.message);
+          },
+        );
+      });
+    }
+
+ 
   }
  
   React.useEffect(() => {
-    console.log(search)
+    // console.log(search)
     async function FetchData (search) {
       await getNotes(search);
+      
     }
     FetchData(search);
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   console.log('Fetching..') 
+    //   FetchData(search);
+    //   console.log("DATA",DATA);
+    // });
+    // return () => {
+    //   unsubscribe;
+    // }
+  }, []);
+  React.useEffect(() => {
+    // console.log(search)
+    async function FetchData (search) {
+      await getNotes(search);
+     
+    }
+    FetchData(search);
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   console.log('Fetching search..') 
+    //   FetchData(search);
+    //   console.log("DATA",DATA);
+    // });
+    // return () => {
+    //   unsubscribe;
+    // }
   }, [search]);
   React.useEffect(() => {
-    async function FetchData() {
+    async function FetchData(search) {
       await createTables();
-      await getNotes('');
+      await getNotes(search);
     }
-    FetchData();
-    const unsubscribe = navigation.addListener('focus', () => {
-      console.log('Fetching..')
-      FetchData();
-      console.log("DATA",DATA);
-    });
-    return () => {
-      unsubscribe;
+     
+    FetchData(search); 
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   console.log('Fetching Tag..') 
+    //   FetchData(search);
+    //   console.log("DATA",DATA);
+    // });
+    // return () => {
+    //   unsubscribe;
+    // }
+  }, [tag]);
+  React.useEffect(() => {
+    async function FetchData(search) {
+      // await createTables();
+      await getNotes(search);
+     
     }
+   
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   console.log('Fetching navigation..') 
+    //   FetchData(search);
+    //   console.log("DATA",DATA);
+    // });
+    // return () => {
+    //   unsubscribe;
+    // }
+    FetchData(search);
   }, [navigation]);
 
   // if (isFocused){
@@ -172,7 +328,15 @@ function Row(props) {
         renderRow={renderRow}
         onPressRow={(index) => {
           console.log("chon note: ", index);
-          navigation.navigate('Note', { id: index });
+          if (checkAlarm==false)
+          {
+            navigation.navigate('Note', { id: index });
+          }
+          else 
+          {
+            navigation.navigate('Note', { id: index,checkAlarm:true });
+
+          }
         }}
       />
     </Layout>

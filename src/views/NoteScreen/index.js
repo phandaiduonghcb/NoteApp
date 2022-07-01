@@ -88,7 +88,7 @@ let NOTE_TITLE
 let NOTE_ALARM
 let titleY;
 const NoteScreen = ({ navigation,route}) => {
-  const {id} = route.params;
+  const {id,checkAlarm} = route.params;
   const [id_item,set_id_item] = React.useState(id);
   const [EditTextState, setEditTextState] = React.useState("Thời gian chỉnh sửa note");
   const [PinState, setPinSate] = React.useState(false); // State có ghim note hay không
@@ -107,7 +107,7 @@ const NoteScreen = ({ navigation,route}) => {
   // const [timePickerVisible, setTimePickerVisible] = React.useState(false);
   const [title, setTitle] = React.useState('');
   const richText = React.useRef();
-  
+  console.log(checkAlarm);
   const resetState = () => {
       setPinSate(false);
       setArchiveState(false);
@@ -195,7 +195,17 @@ const NoteScreen = ({ navigation,route}) => {
     
     // navigation.push('Home');
   }
-  navigation.navigate('Home');
+  if (checkAlarm==true)
+  {
+    
+    navigation.navigate('Alarm');
+    
+  }
+  else 
+  {
+    navigation.navigate('Home');
+  }
+ 
 
 }
   // BackHandler.addEventListener("hardwareBackPress",Back);
@@ -282,7 +292,7 @@ const NoteScreen = ({ navigation,route}) => {
         }
       )
     })
-  }
+  };
   
   React.useEffect(() => {
     async function FetchData (id) {
