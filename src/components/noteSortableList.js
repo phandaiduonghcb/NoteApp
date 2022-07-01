@@ -292,16 +292,16 @@ function Row(props) {
       await getNotes(search);
      
     }
+ 
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Fetching navigation..') 
+      FetchData(search);
+      console.log("DATA",DATA);
+    });
+    return () => {
+      unsubscribe;
+    }
    
-    // const unsubscribe = navigation.addListener('focus', () => {
-    //   console.log('Fetching navigation..') 
-    //   FetchData(search);
-    //   console.log("DATA",DATA);
-    // });
-    // return () => {
-    //   unsubscribe;
-    // }
-    FetchData(search);
   }, [navigation]);
 
   // if (isFocused){
