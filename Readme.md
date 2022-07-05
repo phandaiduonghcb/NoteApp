@@ -49,3 +49,5 @@ and this command on the other terminal:
 npx react-native run-android
 ```
 > Note: in case you get **npm ERR! cb() never called!** error, please remove "node_modules" folder and "package-lock.json" file and run `npm cache clean --force` then try again. 
+
+> Note: Avoid using your desktop keyboard because the emulator may crash, use the keyboard of the emulator instead. 
